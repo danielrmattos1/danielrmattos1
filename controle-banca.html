@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Controle de Banca — Copa 2026 (Hermes com Edição)</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f5f5f0; color: #1a1a1a; min-height: 100vh; padding: 2rem 1rem; }
+  .container { max-width: 1300px; margin: 0 auto; }
+  h1 { font-size: 20px; font-weight: 600; margin-bottom: 4px; }
+  .subtitle { font-size: 13px; color: #666; margin-bottom: 1.5rem; }
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; margin-bottom: 1.5rem; }
+  .card { background: #fff; border-radius: 10px; border: 1px solid #e8e8e3; padding: 14px 16px; }
+  .card-label { font-size: 12px; color: #888; margin-bottom: 6px; }
+  .card-value { font-size: 22px; font-weight: 600; color: #1a1a1a; }
+  .card-value.green { color: #2e7d32; }
+  .card-value.red { color: #c62828; }
+  .banca-bar-wrap { margin-bottom: 1.5rem; }
+  .banca-bar-bg { height: 8px; background: #e0e0e0; border-radius: 4px; overflow: hidden; }
+  .banca-bar-fill { height: 8px; border-radius: 4px; background: #2e7d32; transition: width 0.4s; }
+  .banca-bar-label { display: flex; justify-content: space-between; font-size: 11px; color: #888; margin-top: 4px; }
+  .form-area { background: #fff; border: 1px solid #e8e8e3; border-radius: 12px; padding: 1.25rem; margin-bottom: 1.5rem; }
+  .form-title { font-size: 14px; font-weight: 600; margin-bottom: 14px; display: flex; align-items: center; gap: 6px; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+  .form-group { display: flex; flex-direction: column; gap: 4px; }
+  .form-group label { font-size: 12px; color: #666; }
+  .form-group input, .form-group select { height: 36px; padding: 0 10px; font-size: 13px; border: 1px solid #ddd; border-radius: 8px; background: #fff; color: #1a1a1a; outline: none; }
+  .form-group input:focus, .form-group select:focus { border-color: #1a1a1a; }
+  .btn { height: 36px; padding: 0 16px; font-size: 13px; border: 1px solid #ddd; border-radius: 8px; background: transparent; color: #1a1a1a; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; }
+  .btn:hover { background: #f5f5f0; }
+  .btn-primary { background: #1a1a1a; color: #fff; border-color: transparent; }
+  .btn-primary:hover { background: #333; }
+  .btn-danger { color: #c62828; border-color: #ffcdd2; }
+  .btn-danger:hover { background: #ffebee; }
+  .btn-sm { height: 28px; padding: 0 10px; font-size: 12px; }
+  .actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+  .table-wrap { background: #fff; border: 1px solid #e8e8e3; border-radius: 12px; overflow: hidden; margin-bottom: 1.5rem; overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 1000px; }
+  th { background: #f9f9f6; padding: 10px 12px; text-align: left; font-weight: 500; font-size: 12px; color: #666; border-bottom: 1px solid #e8e8e3; }
+  td { padding: 10px 12px; border-bottom: 1px solid #f0f0eb; color: #1a1a1a; vertical-align: middle; }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: #fafaf7; }
+  .badge { display: inline-block; padding: 3px 9px; border-radius: 6px; font-size: 11px; font-weight: 500; }
+  .badge-win { background: #e8f5e9; color: #2e7d32; }
+  .badge-loss { background: #ffebee; color: #c62828; }
+  .badge-pending { background: #fff8e1; color: #f57f17; }
+  .badge-cashout { background: #e3f2fd; color: #1565c0; }
+  .ev-bar-wrap { height: 6px; background: #e0e0e0; border-radius: 3px; width: 60px; display: inline-block; vertical-align: middle; margin-right: 4px; }
+  .ev-bar { height: 6px; border-radius: 3px; background: #2e7d32; }
+  .empty { text-align: center; padding: 2.5rem; color: #999; font-size: 13px; }
+  .header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 10px; }
+  .section-title { font-size: 15px; font-weight: 600; margin-bottom: 12px; color: #1a1a1a; }
+  .tier-badge { font-size: 10px; font-weight: 700; padding: 2px 6px; border-radius: 4px; margin-left: 4px; }
+  .tier-s { background: #ffebee; color: #c62828; }
+  .tier-a { background: #fff8e1; color: #f57f17; }
+  .tier-b { background: #e8f5e9; color: #2e7d32; }
+  .pl-pos { color: #2e7d32; font-weight: 500; }
+  .pl-neg { color: #c62828; font-weight: 500; }
+  .footer { text-align: center; font-size: 11px; color: #aaa; margin-top: 2rem; }
+  @media (max-width: 600px) {
+    .form-row { grid-template-columns: 1fr; }
+    .cards { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <div>
+      <h1>⚽ Controle de Banca — Copa 2026 (Hermes)</h1>
+      <div class="subtitle">Banca inicial: R$50,00 | Stake padrão: R$0,50 | Edição e cashout visível</div>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="btn" onclick="exportarCSV()"><i class="ti ti-download"></i> Exportar CSV</button>
+      <button class="btn btn-danger" onclick="resetar()"><i class="ti ti-refresh"></i> Resetar tudo</button>
+    </div>
+  </div>
+
+  <div class="cards">
+    <div class="card"><div class="card-label">Banca atual</div><div class="card-value" id="banca-atual">R$50,00</div></div>
+    <div class="card"><div class="card-label">Lucro / Perda</div><div class="card-value" id="lucro">R$0,00</div></div>
+    <div class="card"><div class="card-label">Apostas</div><div class="card-value" id="total-apostas">0</div></div>
+    <div class="card"><div class="card-label">Acertos</div><div class="card-value" id="acertos">0 / 0</div></div>
+    <div class="card"><div class="card-label">Taxa acerto</div><div class="card-value" id="taxa">0%</div></div>
+    <div class="card"><div class="card-label">ROI</div><div class="card-value" id="roi">0%</div></div>
+  </div>
+
+  <div class="banca-bar-wrap">
+    <div class="banca-bar-bg"><div class="banca-bar-fill" id="banca-bar" style="width:100%"></div></div>
+    <div class="banca-bar-label"><span>R$0</span><span id="banca-bar-label">R$50,00 de R$50,00</span><span>R$100</span></div>
+  </div>
+
+  <div class="form-area">
+    <div class="form-title"><i class="ti ti-plus"></i> Registrar nova aposta</div>
+    <div class="form-row">
+      <div class="form-group"><label>Data do jogo (AAAA-MM-DD)</label><input type="date" id="f-data"></div>
+      <div class="form-group"><label>Jogo</label><input type="text" id="f-jogo" placeholder="Ex: Brasil vs Marrocos"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Mercado</label><input type="text" id="f-mercado" placeholder="Ex: Empate"></div>
+      <div class="form-group"><label>Casa</label><select id="f-casa"><option>KTO</option><option>Bet365</option></select></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Odd</label><input type="number" id="f-odd" step="0.01" min="1.01" placeholder="Ex: 3.95"></div>
+      <div class="form-group"><label>Stake (R$)</label><input type="number" id="f-stake" step="0.50" min="0.50" value="0.5"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>EV estimado (%)</label><input type="number" id="f-ev" step="0.01" placeholder="Ex: 15.36"></div>
+      <div class="form-group"><label>Tier</label><select id="f-tier"><option value="">—</option><option value="S">S (EV ≥5%)</option><option value="A">A (3-5%)</option><option value="B">B (2.5-3%)</option></select></div>
+    </div>
+    <div class="actions"><button class="btn btn-primary" onclick="registrar()"><i class="ti ti-check"></i> Registrar aposta</button></div>
+  </div>
+
+  <div class="section-title">Histórico de apostas</div>
+  <div class="table-wrap">
+    <table id="tabela-principal">
+      <thead>
+        <tr><th>Data</th><th>Jogo</th><th>Mercado</th><th>Casa</th><th>Odd</th><th>Stake</th><th>EV</th><th>Tier</th><th>Resultado</th><th>P&L (líquido)</th><th>Cashout (bruto)</th><th>Ações</th></tr>
+      </thead>
+      <tbody id="tabela-corpo">
+        <tr><td colspan="12" class="empty">Nenhuma aposta registrada. Use o formulário acima.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="footer">Hermes Football Agent · Edição permite corrigir erros · Cashout aparece na coluna própria</div>
+</div>
+
+<script>
+const BANCA_INICIAL = 50;
+let apostas = [];
+
+function salvar() { localStorage.setItem('hermes_copa26', JSON.stringify(apostas)); }
+function carregar() {
+  try {
+    const d = localStorage.getItem('hermes_copa26');
+    if (d) apostas = JSON.parse(d);
+  } catch(e) { apostas = []; }
+}
+
+function calcMetrics() {
+  const finalizadas = apostas.filter(a => a.resultado !== 'pending');
+  const wins = apostas.filter(a => a.resultado === 'win');
+  const bancaAtual = apostas.reduce((acc, a) => {
+    if (a.resultado === 'win') return acc + (a.stake * a.odd - a.stake);
+    if (a.resultado === 'loss') return acc - a.stake;
+    if (a.resultado === 'cashout' && a.cashoutValor !== undefined) return acc + (a.cashoutValor - a.stake);
+    return acc;
+  }, BANCA_INICIAL);
+  const lucro = bancaAtual - BANCA_INICIAL;
+  const totalStake = finalizadas.reduce((s, a) => s + a.stake, 0);
+  const roi = totalStake > 0 ? (lucro / totalStake * 100) : 0;
+  const taxa = finalizadas.length > 0 ? (wins.length / finalizadas.length * 100) : 0;
+  return { bancaAtual, lucro, total: apostas.length, finalizadas: finalizadas.length, wins: wins.length, roi, taxa };
+}
+
+function atualizar() {
+  const m = calcMetrics();
+  document.getElementById('banca-atual').textContent = 'R$' + m.bancaAtual.toFixed(2);
+  document.getElementById('banca-atual').className = 'card-value' + (m.bancaAtual >= BANCA_INICIAL ? ' green' : ' red');
+  const lucroStr = (m.lucro >= 0 ? '+' : '') + 'R$' + m.lucro.toFixed(2);
+  document.getElementById('lucro').textContent = lucroStr;
+  document.getElementById('lucro').className = 'card-value' + (m.lucro > 0 ? ' green' : m.lucro < 0 ? ' red' : '');
+  document.getElementById('total-apostas').textContent = m.total;
+  document.getElementById('acertos').textContent = m.wins + ' / ' + m.finalizadas;
+  document.getElementById('taxa').textContent = m.taxa.toFixed(0) + '%';
+  document.getElementById('roi').textContent = (m.roi >= 0 ? '+' : '') + m.roi.toFixed(1) + '%';
+  const pct = Math.min(100, Math.max(0, (m.bancaAtual / 100) * 100));
+  document.getElementById('banca-bar').style.width = pct + '%';
+  document.getElementById('banca-bar').style.background = m.bancaAtual >= BANCA_INICIAL ? '#2e7d32' : '#c62828';
+  document.getElementById('banca-bar-label').textContent = 'R$' + m.bancaAtual.toFixed(2) + ' de R$' + BANCA_INICIAL.toFixed(2);
+  renderTabela();
+}
+
+function renderTabela() {
+  const tbody = document.getElementById('tabela-corpo');
+  if (!apostas.length) {
+    tbody.innerHTML = '<tr><td colspan="12" class="empty">Nenhuma aposta registrada. Use o formulário acima.</td></tr>';
+    return;
+  }
+  tbody.innerHTML = apostas.map((a, idx) => {
+    let plLiquido = null;
+    let cashoutBruto = '';
+    if (a.resultado === 'win') plLiquido = +(a.stake * (a.odd - 1)).toFixed(2);
+    else if (a.resultado === 'loss') plLiquido = -a.stake;
+    else if (a.resultado === 'cashout' && a.cashoutValor !== undefined) {
+      plLiquido = +(a.cashoutValor - a.stake).toFixed(2);
+      cashoutBruto = 'R$' + a.cashoutValor.toFixed(2);
+    }
+    const plStr = plLiquido === null ? '—' : (plLiquido > 0 ? '+' : '') + 'R$' + Math.abs(plLiquido).toFixed(2);
+    const plClass = plLiquido === null ? '' : plLiquido > 0 ? 'pl-pos' : 'pl-neg';
+    const evHtml = a.ev ? `<div class="ev-bar-wrap"><div class="ev-bar" style="width:${Math.min(100, a.ev * 6)}%"></div></div>${a.ev.toFixed(1)}%` : '—';
+    const tierHtml = a.tier ? `<span class="tier-badge tier-${a.tier.toLowerCase()}">${a.tier}</span>` : '—';
+    let badge = '';
+    if (a.resultado === 'win') badge = '<span class="badge badge-win">Ganhou</span>';
+    else if (a.resultado === 'loss') badge = '<span class="badge badge-loss">Perdeu</span>';
+    else if (a.resultado === 'cashout') badge = '<span class="badge badge-cashout">Cashout</span>';
+    else badge = '<span class="badge badge-pending">Pendente</span>';
+    let btns = '';
+    if (a.resultado === 'pending') {
+      btns = `<div style="display:flex;gap:4px">
+        <button class="btn btn-sm" onclick="editarAposta(${idx})"><i class="ti ti-edit"></i></button>
+        <button class="btn btn-sm" style="background:#e8f5e9;color:#2e7d32" onclick="marcar(${idx},'win')"><i class="ti ti-check"></i></button>
+        <button class="btn btn-sm btn-danger" onclick="marcar(${idx},'loss')"><i class="ti ti-x"></i></button>
+        <button class="btn btn-sm" style="background:#e3f2fd;color:#1565c0" onclick="cashoutAposta(${idx})"><i class="ti ti-currency-dollar"></i></button>
+      </div>`;
+    } else {
+      btns = `<div style="display:flex;gap:4px">
+        <button class="btn btn-sm" onclick="editarAposta(${idx})"><i class="ti ti-edit"></i></button>
+        <button class="btn btn-sm btn-danger" onclick="remover(${idx})"><i class="ti ti-trash"></i></button>
+      </div>`;
+    }
+    return `<tr>
+      <td style="white-space:nowrap">${a.data || '—'}</td>
+      <td><strong>${a.jogo}</strong></td>
+      <td>${a.mercado}</td>
+      <td>${a.casa}</td>
+      <td>${a.odd.toFixed(2)}</td>
+      <td>R$${a.stake.toFixed(2)}</td>
+      <td>${evHtml}</td>
+      <td>${tierHtml}</td>
+      <td>${badge}</td>
+      <td class="${plClass}">${plStr}</td>
+      <td>${cashoutBruto || '—'}</td>
+      <td>${btns}</td>
+    </tr>`;
+  }).join('');
+}
+
+function registrar() {
+  const data = document.getElementById('f-data').value;
+  const jogo = document.getElementById('f-jogo').value.trim();
+  const mercado = document.getElementById('f-mercado').value.trim();
+  const casa = document.getElementById('f-casa').value;
+  const odd = parseFloat(document.getElementById('f-odd').value);
+  const stake = parseFloat(document.getElementById('f-stake').value);
+  const ev = parseFloat(document.getElementById('f-ev').value) || null;
+  const tier = document.getElementById('f-tier').value || null;
+  if (!jogo || !mercado || isNaN(odd) || isNaN(stake) || !data) {
+    alert('Preencha todos os campos (data, jogo, mercado, odd, stake).');
+    return;
+  }
+  apostas.push({ data, jogo, mercado, casa, odd, stake, ev, tier, resultado: 'pending' });
+  salvar();
+  atualizar();
+  document.getElementById('f-jogo').value = '';
+  document.getElementById('f-mercado').value = '';
+  document.getElementById('f-odd').value = '';
+  document.getElementById('f-ev').value = '';
+  document.getElementById('f-tier').value = '';
+  document.getElementById('f-data').valueAsDate = new Date();
+}
+
+function editarAposta(idx) {
+  const a = apostas[idx];
+  const novaData = prompt('Data (AAAA-MM-DD):', a.data);
+  if (novaData === null) return;
+  const novoJogo = prompt('Jogo:', a.jogo);
+  if (novoJogo === null) return;
+  const novoMercado = prompt('Mercado:', a.mercado);
+  if (novoMercado === null) return;
+  const novaCasa = prompt('Casa (KTO/Bet365):', a.casa);
+  if (novaCasa === null) return;
+  const novaOdd = parseFloat(prompt('Odd:', a.odd));
+  if (isNaN(novaOdd)) return;
+  const novoStake = parseFloat(prompt('Stake (R$):', a.stake));
+  if (isNaN(novoStake)) return;
+  const novoEv = parseFloat(prompt('EV % (opcional, deixe vazio se não quiser):', a.ev !== null ? a.ev : ''));
+  const novoTier = prompt('Tier (S/A/B ou vazio):', a.tier || '');
+  apostas[idx] = {
+    ...a,
+    data: novaData,
+    jogo: novoJogo,
+    mercado: novoMercado,
+    casa: novaCasa,
+    odd: novaOdd,
+    stake: novoStake,
+    ev: isNaN(novoEv) ? null : novoEv,
+    tier: novoTier || null,
+    resultado: a.resultado,
+    cashoutValor: a.cashoutValor
+  };
+  salvar();
+  atualizar();
+}
+
+function marcar(i, resultado) {
+  apostas[i].resultado = resultado;
+  if (resultado !== 'cashout') delete apostas[i].cashoutValor;
+  salvar();
+  atualizar();
+}
+
+function cashoutAposta(i) {
+  const aposta = apostas[i];
+  if (!aposta || aposta.resultado !== 'pending') return;
+  let valor = prompt(`Digite o valor TOTAL recebido no cashout (R$):\nStake: R$${aposta.stake}\nOdd original: ${aposta.odd}`, (aposta.stake * 0.9).toFixed(2));
+  if (valor === null) return;
+  valor = parseFloat(valor.replace(',', '.'));
+  if (isNaN(valor)) return;
+  aposta.resultado = 'cashout';
+  aposta.cashoutValor = valor;
+  salvar();
+  atualizar();
+}
+
+function remover(i) {
+  if (confirm('Remover esta aposta permanentemente?')) {
+    apostas.splice(i, 1);
+    salvar();
+    atualizar();
+  }
+}
+
+function resetar() {
+  if (confirm('Resetar todo o histórico? Esta ação não pode ser desfeita.')) {
+    apostas = [];
+    salvar();
+    atualizar();
+  }
+}
+
+function exportarCSV() {
+  const header = ['Data','Jogo','Mercado','Casa','Odd','Stake','EV%','Tier','Resultado','P&L Liquido','Cashout Bruto'];
+  const rows = apostas.map(a => {
+    let pl = '';
+    let cashoutBruto = '';
+    if (a.resultado === 'win') pl = +(a.stake * (a.odd - 1)).toFixed(2);
+    else if (a.resultado === 'loss') pl = -a.stake;
+    else if (a.resultado === 'cashout' && a.cashoutValor !== undefined) {
+      pl = +(a.cashoutValor - a.stake).toFixed(2);
+      cashoutBruto = a.cashoutValor.toFixed(2);
+    }
+    return [a.data, a.jogo, a.mercado, a.casa, a.odd, a.stake, a.ev || '', a.tier || '', a.resultado, pl, cashoutBruto].join(';');
+  });
+  const csv = [header.join(';'), ...rows].join('\n');
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'hermes_controle_' + new Date().toISOString().slice(0,10) + '.csv';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+// Inicialização
+document.getElementById('f-data').valueAsDate = new Date();
+carregar();
+atualizar();
+</script>
+</body>
+</html>

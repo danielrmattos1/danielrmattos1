@@ -1,0 +1,30 @@
+<svg width="1200" height="300" viewBox="0 0 1200 300" xmlns="http://www.w3.org/2000/svg" font-family="'Segoe UI',Helvetica,Arial,sans-serif">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0A130F"/>
+      <stop offset="1" stop-color="#0E1A14"/>
+    </linearGradient>
+    <linearGradient id="mint" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#EAF3EC"/>
+      <stop offset="1" stop-color="#36E0A0"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.8" cy="0.1" r="0.9">
+      <stop offset="0" stop-color="#36E0A0" stop-opacity="0.14"/>
+      <stop offset="1" stop-color="#36E0A0" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="300" fill="url(#bg)"/>
+  <rect width="1200" height="300" fill="url(#glow)"/>
+  <!-- pitch lines -->
+  <g stroke="#21362B" stroke-width="2" fill="none" opacity="0.7">
+    <rect x="40" y="40" width="1120" height="220" rx="10"/>
+    <line x1="600" y1="40" x2="600" y2="260"/>
+    <circle cx="600" cy="150" r="46"/>
+    <path d="M40 100 H120 V200 H40"/>
+    <path d="M1160 100 H1080 V200 H1160"/>
+  </g>
+  <text x="80" y="150" font-size="76" font-weight="800" letter-spacing="2" fill="url(#mint)">GROUND<tspan fill="#FFB627">·</tspan>TRUTH</text>
+  <text x="84" y="192" font-size="22" font-weight="600" letter-spacing="4" fill="#7E9389">MATCH INTELLIGENCE · FIFA WORLD CUP 2026</text>
+  <text x="84" y="226" font-size="15" letter-spacing="2" fill="#36E0A0">Probabilistic predictions · live-updating Elo · tournament simulation</text>
+  <text x="1120" y="280" font-size="13" text-anchor="end" letter-spacing="1" fill="#7E9389">developed by Matin Shahin</text>
+</svg>

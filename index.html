@@ -1,0 +1,1052 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>GROUNDTRUTH · Match Intelligence · World Cup 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800;900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0A130F; --bg2:#0E1A14; --panel:#122019; --panel2:#16271E;
+  --line:#21362B; --line2:#2c4838;
+  --mint:#36E0A0; --mint-dim:#1c6b4d; --amber:#FFB627; --blue:#5AA9E6;
+  --chalk:#EAF3EC; --muted:#7E9389; --danger:#FF6B6B;
+  --display:'Archivo',system-ui,sans-serif;
+  --body:'Inter',system-ui,sans-serif;
+  --mono:'JetBrains Mono','SF Mono',ui-monospace,monospace;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:
+    radial-gradient(1200px 600px at 80% -10%, rgba(54,224,160,.07), transparent 60%),
+    radial-gradient(900px 500px at 0% 0%, rgba(255,182,39,.05), transparent 55%),
+    var(--bg);
+  color:var(--chalk); font-family:var(--body); line-height:1.5;
+  -webkit-font-smoothing:antialiased; min-height:100vh;
+}
+a{color:var(--mint);text-decoration:none}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px 80px}
+
+/* Header */
+header{border-bottom:1px solid var(--line);position:sticky;top:0;z-index:20;
+  background:rgba(10,19,15,.82);backdrop-filter:blur(10px)}
+.head-in{max-width:1080px;margin:0 auto;padding:14px 20px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.brand{display:flex;align-items:baseline;gap:10px}
+.logo{font-family:var(--display);font-weight:900;font-size:24px;letter-spacing:.06em;
+  background:linear-gradient(90deg,var(--chalk),var(--mint));-webkit-background-clip:text;background-clip:text;color:transparent}
+.logo .dot{color:var(--amber);-webkit-text-fill-color:var(--amber)}
+.tag{font-family:var(--mono);font-size:10.5px;color:var(--muted);letter-spacing:.14em;text-transform:uppercase}
+nav{margin-left:auto;display:flex;gap:4px;flex-wrap:wrap}
+.tab{font-family:var(--display);font-weight:700;font-size:12.5px;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--muted);background:none;border:1px solid transparent;border-radius:8px;padding:8px 13px;cursor:pointer;transition:.15s}
+.tab:hover{color:var(--chalk)}
+.tab.on{color:var(--bg);background:var(--mint);border-color:var(--mint)}
+
+/* Sections */
+.view{display:none;padding-top:26px}
+.view.on{display:block;animation:fade .35s ease}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--mint)}
+h2.title{font-family:var(--display);font-weight:900;font-size:clamp(26px,5vw,40px);line-height:1;margin:6px 0 4px;letter-spacing:-.01em}
+.sub{color:var(--muted);max-width:60ch;font-size:14px}
+
+/* Cards */
+.card{background:linear-gradient(180deg,var(--panel),var(--bg2));border:1px solid var(--line);border-radius:16px;padding:20px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.row{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+label.fld{display:block;font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+select,input[type=number]{width:100%;background:var(--bg);color:var(--chalk);border:1px solid var(--line2);
+  border-radius:10px;padding:11px 12px;font-family:var(--body);font-size:15px;appearance:none}
+select:focus,input:focus{outline:2px solid var(--mint);outline-offset:1px}
+.selwrap{position:relative}
+.selwrap::after{content:"▾";position:absolute;right:12px;top:50%;transform:translateY(-50%);color:var(--muted);pointer-events:none;font-size:12px}
+.toggle{display:inline-flex;align-items:center;gap:8px;cursor:pointer;user-select:none;font-size:13px;color:var(--muted)}
+.toggle input{display:none}
+.switch{width:38px;height:22px;border-radius:99px;background:var(--line2);position:relative;transition:.2s}
+.switch::after{content:"";position:absolute;width:16px;height:16px;border-radius:50%;background:var(--chalk);top:3px;left:3px;transition:.2s}
+.toggle input:checked + .switch{background:var(--mint)}
+.toggle input:checked + .switch::after{left:19px;background:var(--bg)}
+.btn{font-family:var(--display);font-weight:800;letter-spacing:.06em;text-transform:uppercase;font-size:13px;
+  background:var(--mint);color:var(--bg);border:none;border-radius:10px;padding:13px 22px;cursor:pointer;transition:.15s}
+.btn:hover{filter:brightness(1.08);transform:translateY(-1px)}
+.btn.ghost{background:transparent;color:var(--chalk);border:1px solid var(--line2)}
+
+/* Scoreboard */
+.board{margin-top:18px;border:1px solid var(--line);border-radius:18px;overflow:hidden;
+  background:linear-gradient(180deg,var(--panel2),var(--bg2))}
+.board-top{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:8px;padding:24px 22px;
+  background:
+    repeating-linear-gradient(90deg,transparent,transparent 38px,rgba(54,224,160,.03) 38px,rgba(54,224,160,.03) 76px);
+  position:relative}
+.board-top::before{content:"";position:absolute;left:50%;top:14%;bottom:14%;width:1px;background:linear-gradient(var(--line2),transparent,var(--line2))}
+.tname{font-family:var(--display);font-weight:900;font-size:clamp(18px,3.6vw,30px);line-height:1.02;text-transform:uppercase;letter-spacing:.01em}
+.side-h .tname{color:var(--amber)} .side-a .tname{color:var(--blue)}
+.side{min-width:0}
+.side-a{text-align:right}
+.sflag{font-size:30px;line-height:1}
+.selo{font-family:var(--mono);font-size:11px;color:var(--muted);margin-top:4px}
+.score{font-family:var(--mono);font-weight:700;font-size:clamp(30px,7vw,52px);letter-spacing:.04em;text-align:center;white-space:nowrap}
+.score .vs{color:var(--muted);font-size:14px;display:block;font-family:var(--mono);letter-spacing:.2em;margin-bottom:2px}
+.score-line{color:var(--chalk)}
+.board-meta{display:flex;justify-content:center;gap:18px;padding:0 0 16px;font-family:var(--mono);font-size:11px;color:var(--muted)}
+.board-meta b{color:var(--mint);font-weight:700}
+
+/* Pitch bar (signature) */
+.pitchbar{padding:18px 22px 22px;border-top:1px solid var(--line)}
+.pbar{height:46px;border-radius:10px;overflow:hidden;display:flex;border:1px solid var(--line2);position:relative;
+  background:repeating-linear-gradient(90deg,#0d1d16,#0d1d16 30px,#0f2018 30px,#0f2018 60px)}
+.pseg{display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:var(--mono);
+  font-size:13px;font-weight:700;color:var(--bg);transition:width .9s cubic-bezier(.2,.7,.2,1);min-width:0;overflow:hidden;white-space:nowrap}
+.pseg small{font-size:9px;font-weight:500;opacity:.8;letter-spacing:.05em;text-transform:uppercase}
+.seg-h{background:linear-gradient(180deg,#ffc14d,var(--amber));color:#3a2600}
+.seg-d{background:linear-gradient(180deg,#2c4838,#21362b);color:var(--chalk)}
+.seg-a{background:linear-gradient(180deg,#7cc0f0,var(--blue));color:#072138}
+.pbar::after{content:"";position:absolute;left:50%;top:0;bottom:0;width:0;border-left:1px dashed rgba(234,243,236,.25)}
+
+/* Stat tiles */
+.tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:14px}
+.tile{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:12px}
+.tile .k{font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.tile .v{font-family:var(--display);font-weight:800;font-size:21px;margin-top:3px}
+.tile .v small{font-size:11px;color:var(--muted);font-weight:500}
+
+/* scoreline ladder */
+.ladder{display:flex;flex-direction:column;gap:7px;margin-top:12px}
+.lrow{display:grid;grid-template-columns:64px 1fr 48px;align-items:center;gap:10px;font-family:var(--mono);font-size:13px}
+.lrow .sl{color:var(--chalk);font-weight:700}
+.ltrack{height:9px;background:var(--bg);border-radius:99px;overflow:hidden;border:1px solid var(--line)}
+.lfill{height:100%;background:linear-gradient(90deg,var(--mint-dim),var(--mint));border-radius:99px;transition:width .8s}
+.lrow .lp{color:var(--muted);text-align:right}
+
+/* analyst */
+.analyst{margin-top:14px;background:var(--bg);border:1px solid var(--line);border-left:3px solid var(--mint);border-radius:12px;padding:16px 18px}
+.analyst .who{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--mint);margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.analyst p{margin:0 0 9px;font-size:14.5px}
+.analyst p:last-child{margin-bottom:0}
+.pulse{width:7px;height:7px;border-radius:50%;background:var(--mint);box-shadow:0 0 0 0 rgba(54,224,160,.6);animation:pulse 1.8s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(54,224,160,.5)}70%{box-shadow:0 0 0 8px rgba(54,224,160,0)}100%{box-shadow:0 0 0 0 rgba(54,224,160,0)}}
+
+/* matrix heatmap */
+.heat{display:grid;grid-template-columns:auto repeat(6,1fr);gap:3px;margin-top:10px;font-family:var(--mono);font-size:10px}
+.heat .hc{aspect-ratio:1.6/1;border-radius:4px;display:flex;align-items:center;justify-content:center;color:var(--chalk)}
+.heat .axis{color:var(--muted);display:flex;align-items:center;justify-content:center}
+
+/* simulate */
+.simteams{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px;margin-top:14px;max-height:280px;overflow:auto;padding:4px}
+.chk{display:flex;align-items:center;gap:8px;background:var(--bg);border:1px solid var(--line);border-radius:9px;padding:9px 11px;cursor:pointer;font-size:13px}
+.chk:hover{border-color:var(--line2)}
+.chk.sel{border-color:var(--mint);background:rgba(54,224,160,.07)}
+.chk input{accent-color:var(--mint)}
+.chk .e{margin-left:auto;font-family:var(--mono);font-size:10px;color:var(--muted)}
+.results-list{display:flex;flex-direction:column;gap:8px;margin-top:16px}
+.rres{display:grid;grid-template-columns:26px 150px 1fr 60px;align-items:center;gap:10px}
+.rres .rk{font-family:var(--mono);color:var(--muted);font-size:12px}
+.rres .nm{font-weight:600;font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rtrack{height:14px;background:var(--bg);border:1px solid var(--line);border-radius:99px;overflow:hidden}
+.rfill{height:100%;background:linear-gradient(90deg,var(--mint-dim),var(--mint));transition:width .7s}
+.rres .rp{font-family:var(--mono);font-size:13px;color:var(--mint);text-align:right;font-weight:700}
+
+/* ratings table */
+table{width:100%;border-collapse:collapse;margin-top:14px;font-size:14px}
+th,td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--line)}
+th{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+td input{width:90px;background:var(--bg);border:1px solid var(--line);border-radius:7px;padding:6px 8px;color:var(--chalk);font-family:var(--mono);font-size:13px}
+.searchbar{width:100%;background:var(--bg);border:1px solid var(--line2);border-radius:10px;padding:11px 14px;color:var(--chalk);font-size:14px;margin-top:6px}
+textarea{width:100%;background:var(--bg);color:var(--chalk);border:1px solid var(--line2);border-radius:10px;padding:11px 12px;font-family:var(--body);font-size:14px;resize:vertical;min-height:84px}
+textarea:focus{outline:2px solid var(--mint);outline-offset:1px}
+.codebox{background:#08110d;border:1px solid var(--line);border-radius:10px;padding:12px 14px;font-family:var(--mono);font-size:12px;color:#bfe9d4;white-space:pre-wrap;word-break:break-word;max-height:240px;overflow:auto;margin-top:10px}
+.pill{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;padding:5px 10px;border-radius:99px;border:1px solid var(--line2);color:var(--muted)}
+.pill.live{color:var(--mint);border-color:var(--mint-dim)} .pill.off{color:var(--amber);border-color:rgba(255,182,39,.4)}
+.adjrow{display:flex;align-items:center;gap:10px;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin-top:8px}
+.adjrow .nm{font-weight:600;font-size:14px} .adjrow .delta{font-family:var(--mono);font-weight:700;margin-left:auto}
+.delta.up{color:var(--mint)} .delta.dn{color:var(--danger)} .delta.zero{color:var(--muted)}
+.adjrow .rsn{font-size:12px;color:var(--muted);flex-basis:100%;order:5}
+.scout-note{font-family:var(--mono);font-size:11px;color:var(--muted);margin-top:6px}
+.resform{display:grid;grid-template-columns:1fr 60px 60px 1fr 1fr auto;gap:8px;align-items:end}
+.resform input[type=number]{width:100%}
+.logitem{display:flex;align-items:center;gap:10px;font-family:var(--mono);font-size:12.5px;padding:8px 0;border-bottom:1px solid var(--line)}
+.logitem .res{color:var(--chalk);font-weight:700} .logitem .dl{margin-left:auto;color:var(--muted)}
+/* fixtures */
+.grpcard{background:linear-gradient(180deg,var(--panel),var(--bg2));border:1px solid var(--line);border-radius:16px;padding:16px 18px;margin-top:14px}
+.grphd{display:flex;align-items:center;gap:10px;flex-wrap:wrap;border-bottom:1px solid var(--line);padding-bottom:10px;margin-bottom:6px}
+.grphd .gn{font-family:var(--display);font-weight:900;font-size:18px;letter-spacing:.04em}
+.qodds{display:flex;gap:6px;flex-wrap:wrap;margin-left:auto}
+.qchip{font-family:var(--mono);font-size:10.5px;padding:4px 8px;border-radius:99px;border:1px solid var(--line2);color:var(--muted)}
+.qchip b{color:var(--mint);font-weight:700} .qchip.q1{border-color:var(--mint-dim);color:var(--chalk)}
+.fxrow{display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:center;padding:9px 0;border-bottom:1px solid rgba(33,54,43,.5)}
+.fxrow:last-child{border-bottom:none}
+.fxt{display:flex;align-items:center;gap:7px;font-size:13.5px;min-width:0}
+.fxt.away{justify-content:flex-end;text-align:right}
+.fxt .fl{font-size:17px}.fxt .nm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.fxmid{display:flex;flex-direction:column;align-items:center;gap:5px;min-width:118px}
+.fxscore{font-family:var(--mono);font-weight:700;font-size:15px}
+.fxbar{height:7px;width:108px;border-radius:99px;overflow:hidden;display:flex;border:1px solid var(--line)}
+.fxbar i{display:block;height:100%} .fxbar .h{background:var(--amber)} .fxbar .d{background:#2c4838} .fxbar .a{background:var(--blue)}
+.fxpct{font-family:var(--mono);font-size:9.5px;color:var(--muted);display:flex;gap:6px}
+.fxrow.done{opacity:.92}
+.ftchip{font-family:var(--mono);font-size:8.5px;letter-spacing:.12em;color:var(--mint);border:1px solid var(--mint-dim);border-radius:99px;padding:2px 7px}
+.fxscore.win-h{color:var(--amber)} .fxscore.win-a{color:var(--blue)} .fxscore.win-d{color:var(--chalk)}
+.synced{font-family:var(--mono);font-size:11px;color:var(--muted)}
+/* stats projection */
+.statrow{display:grid;grid-template-columns:52px 1fr 52px;gap:10px;align-items:center;padding:7px 0;border-bottom:1px solid rgba(33,54,43,.45)}
+.statrow:last-of-type{border-bottom:none}
+.statrow .sv{font-family:var(--mono);font-weight:700;font-size:14px}
+.statrow .sv.l{text-align:right;color:var(--amber)} .statrow .sv.r{text-align:left;color:var(--blue)}
+.statmid{display:flex;flex-direction:column;gap:5px}
+.statlbl{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);text-align:center}
+.statbar{height:7px;border-radius:99px;overflow:hidden;display:flex;background:var(--bg);border:1px solid var(--line)}
+.statbar i{display:block;height:100%} .statbar .l{background:var(--amber)} .statbar .r{background:var(--blue)}
+@media(max-width:680px){.fxmid{min-width:96px}.fxbar{width:88px}}
+@media(max-width:680px){.resform{grid-template-columns:1fr 1fr}.resform>*{grid-column:span 1}}
+
+/* method */
+.method p{font-size:14.5px;color:#cdddd2;max-width:72ch}
+.method h3{font-family:var(--display);font-weight:800;font-size:17px;margin:22px 0 6px;letter-spacing:.01em}
+.method code{font-family:var(--mono);background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:2px 6px;font-size:12.5px;color:var(--mint)}
+.callout{background:rgba(255,182,39,.06);border:1px solid rgba(255,182,39,.25);border-radius:12px;padding:14px 16px;margin-top:14px}
+.callout .t{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--amber);margin-bottom:6px}
+.foot{margin-top:30px;padding-top:18px;border-top:1px solid var(--line);font-family:var(--mono);font-size:11px;color:var(--muted)}
+@media(max-width:680px){
+  .tiles{grid-template-columns:repeat(2,1fr)}
+  .grid2{grid-template-columns:1fr}
+  .rres{grid-template-columns:22px 110px 1fr 52px}
+  nav{width:100%;order:3}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="head-in">
+    <div class="brand">
+      <span class="logo">GROUND<span class="dot">·</span>TRUTH</span>
+    </div>
+    <span class="tag">Match Intelligence · WC 2026 · by Matin Shahin</span>
+    <nav>
+      <button class="tab on" data-v="predict">Predict</button>
+      <button class="tab" data-v="fixtures">Fixtures</button>
+      <button class="tab" data-v="simulate">Simulate</button>
+      <button class="tab" data-v="scout">Scout</button>
+      <button class="tab" data-v="ratings">Ratings</button>
+      <button class="tab" data-v="method">Method</button>
+    </nav>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <!-- PREDICT -->
+  <section class="view on" id="v-predict">
+    <div class="eyebrow">Single match · probabilistic model</div>
+    <h2 class="title">Read the match before it's played.</h2>
+    <p class="sub">Pick two sides. The engine converts live Elo strength into an expected-goals model, then a Poisson scoreline distribution. Every probability below is derived from one consistent model, not guessed.</p>
+
+    <div class="card" style="margin-top:18px">
+      <div class="grid2">
+        <div>
+          <label class="fld">Home / Team A</label>
+          <div class="selwrap"><select id="teamA"></select></div>
+        </div>
+        <div>
+          <label class="fld">Away / Team B</label>
+          <div class="selwrap"><select id="teamB"></select></div>
+        </div>
+      </div>
+      <div class="row" style="margin-top:14px;justify-content:space-between">
+        <label class="toggle"><input type="checkbox" id="neutral" checked><span class="switch"></span>Neutral venue (no home edge)</label>
+        <button class="btn" id="runPredict">Run prediction</button>
+      </div>
+    </div>
+
+    <div id="predOut"></div>
+  </section>
+
+  <!-- FIXTURES -->
+  <section class="view" id="v-fixtures">
+    <div class="eyebrow">Every group match · WC 2026</div>
+    <h2 class="title">All 72 group games, predicted.</h2>
+    <p class="sub">The real draw, all 12 groups. Completed matches show the actual full-time score and are folded into the ratings; upcoming games are predicted, and each group is simulated 5,000 times for qualification odds. "Update results" pulls the latest scores (via your OpenRouter key, web search on); "Export to share" saves a fresh standalone file with everything baked in, so anyone you send it to just opens it, no key or setup needed.</p>
+    <div class="row" style="margin-top:14px;justify-content:space-between;align-items:center">
+      <span class="synced" id="fixStatus"></span>
+      <div class="row">
+        <button class="btn ghost" id="exportFix">Export to share</button>
+        <button class="btn" id="syncFix">Update results</button>
+      </div>
+    </div>
+    <div id="fixOut"></div>
+  </section>
+
+  <!-- SIMULATE -->
+  <section class="view" id="v-simulate">
+    <div class="eyebrow">Monte Carlo · knockout bracket</div>
+    <h2 class="title">Simulate the bracket 10,000 times.</h2>
+    <p class="sub">Pick a power of two (4, 8, or 16 teams). Each run plays out a full single-elimination bracket, with goals sampled from the model and draws settled on penalties, then we count how often each side lifts the trophy.</p>
+
+    <div class="card" style="margin-top:18px">
+      <div class="row" style="justify-content:space-between">
+        <div class="row">
+          <span class="fld" style="margin:0">Bracket size</span>
+          <div class="selwrap" style="width:120px"><select id="bsize">
+            <option value="4">4 teams</option>
+            <option value="8" selected>8 teams</option>
+            <option value="16">16 teams</option>
+          </select></div>
+          <span id="selCount" style="font-family:var(--mono);font-size:12px;color:var(--muted)"></span>
+        </div>
+        <div class="row">
+          <button class="btn ghost" id="seedTop">Seed top by Elo</button>
+          <button class="btn" id="runSim">Run 10,000 sims</button>
+        </div>
+      </div>
+      <div class="simteams" id="simTeams"></div>
+    </div>
+    <div id="simOut"></div>
+  </section>
+
+  <!-- SCOUT -->
+  <section class="view" id="v-scout">
+    <div class="eyebrow">AI scout · qualitative → Elo nudge</div>
+    <h2 class="title">Turn the team news into a number.</h2>
+    <p class="sub">The maths handles strength. The scout handles everything maths can't see (injuries, suspensions, rest, momentum, weather) and converts it into a small Elo adjustment (±45) the predictor folds into the match. Works with no setup; add an OpenRouter key in Settings to make it one click.</p>
+
+    <div class="card" style="margin-top:18px">
+      <div class="row" style="justify-content:space-between;align-items:center">
+        <label class="toggle"><input type="checkbox" id="scoutOn"><span class="switch"></span>Apply scout adjustments in Predict</label>
+        <span id="proxyPill" class="pill off">● AI scout: no key (paste mode)</span>
+      </div>
+      <div class="grid2" style="margin-top:14px">
+        <div>
+          <label class="fld">Team A</label>
+          <div class="selwrap"><select id="scA"></select></div>
+          <textarea id="noteA" placeholder="Team A news, e.g. first-choice CB suspended, star winger injured, 3 days rest, strong recent form" style="margin-top:8px"></textarea>
+        </div>
+        <div>
+          <label class="fld">Team B</label>
+          <div class="selwrap"><select id="scB"></select></div>
+          <textarea id="noteB" placeholder="Team B news, e.g. full squad available, key striker returning from injury, long travel, low morale" style="margin-top:8px"></textarea>
+        </div>
+      </div>
+      <div class="row" style="margin-top:14px">
+        <button class="btn" id="scoutAuto">Run scout (OpenRouter)</button>
+        <button class="btn ghost" id="scoutPrompt">Build prompt to paste into any AI</button>
+      </div>
+      <div id="scoutPromptOut"></div>
+      <div style="margin-top:14px">
+        <label class="fld">Paste the AI's JSON reply here, then apply</label>
+        <textarea id="scoutJSON" placeholder='{"home_adjust": -25, "away_adjust": 10, "home_reason": "…", "away_reason": "…"}'></textarea>
+        <div class="row" style="margin-top:10px"><button class="btn" id="scoutApply">Apply adjustments</button>
+        <button class="btn ghost" id="scoutClear">Clear all adjustments</button></div>
+      </div>
+      <div id="scoutState"></div>
+    </div>
+
+    <div class="card" style="margin-top:14px">
+      <label class="fld">Settings · OpenRouter (optional, for one-click scouting)</label>
+      <p class="scout-note" style="margin-bottom:10px">Paste your key from openrouter.ai/keys to enable the "Run scout" button. The key is stored only in this browser on this device and is sent solely to OpenRouter. No key? The paste workflow above works with any AI, free.</p>
+      <div class="grid2">
+        <div><label class="fld">OpenRouter API key</label><input type="password" id="orKey" placeholder="sk-or-..."></div>
+        <div><label class="fld">Model (any slug from openrouter.ai/models)</label><input type="text" id="orModel" placeholder="openai/gpt-4o-mini"></div>
+      </div>
+      <div style="margin-top:12px"><label class="fld">Results backend URL (for "Sync latest results")</label><input type="text" id="beUrl" placeholder="http://localhost:8787"></div>
+      <div class="row" style="margin-top:12px"><button class="btn" id="saveSettings">Save settings</button>
+      <span class="scout-note">Good cheap picks: openai/gpt-4o-mini, anthropic/claude-3.5-haiku, google/gemini-2.0-flash-001</span></div>
+    </div>
+  </section>
+
+  <!-- RATINGS -->
+  <section class="view" id="v-ratings">
+    <div class="eyebrow">Team strength · editable</div>
+    <h2 class="title">Your ratings, your model.</h2>
+    <p class="sub">Seeded with current World Football Elo (as of 12 Jun 2026) for the top sides and best estimates for the rest. Enter a result below and ratings auto-update with the official Elo formula, or edit any number by hand. The predictor and simulator update instantly.</p>
+
+    <div class="card" style="margin-top:14px">
+      <label class="fld">Auto-update from a result</label>
+      <div class="resform">
+        <div><label class="scout-note">Home</label><div class="selwrap"><select id="rsHome"></select></div></div>
+        <div><label class="scout-note">Goals</label><input type="number" id="rsGH" min="0" value="2"></div>
+        <div><label class="scout-note">Goals</label><input type="number" id="rsGA" min="0" value="1"></div>
+        <div><label class="scout-note">Away</label><div class="selwrap"><select id="rsAway"></select></div></div>
+        <div><label class="scout-note">Importance</label><div class="selwrap"><select id="rsImp">
+          <option value="wcfinals">World Cup (×60)</option><option value="major">Major tourn. (×50)</option>
+          <option value="qualifier">Qualifier (×40)</option><option value="tournament">Other tourn. (×30)</option>
+          <option value="friendly">Friendly (×20)</option></select></div></div>
+        <div><button class="btn" id="rsApply" style="width:100%">Apply</button></div>
+      </div>
+      <label class="toggle" style="margin-top:10px"><input type="checkbox" id="rsNeutral" checked><span class="switch"></span>Neutral venue</label>
+      <div id="rsLog"></div>
+    </div>
+
+    <input class="searchbar" id="ratSearch" placeholder="Filter teams…">
+    <div style="max-height:520px;overflow:auto" class="card" style="margin-top:12px">
+      <table><thead><tr><th>Team</th><th>Confed.</th><th>Elo</th></tr></thead>
+      <tbody id="ratBody"></tbody></table>
+    </div>
+    <div class="row" style="margin-top:14px">
+      <button class="btn ghost" id="resetRat">Reset to seed values</button>
+    </div>
+  </section>
+
+  <!-- METHOD -->
+  <section class="view method" id="v-method">
+    <div class="eyebrow">How it works · the honest version</div>
+    <h2 class="title">The model, with nothing hidden.</h2>
+    <div class="callout">
+      <div class="t">Read this first</div>
+      <p style="margin:0">No system predicts football with "high accuracy on every match." Outcomes carry real, irreducible randomness, and that's why we watch. The best public and bookmaker models land roughly 55 to 65% on win/draw/loss and far lower on exact scores. GROUNDTRUTH targets that same honest tier and shows you the full probability, never a fake certainty.</p>
+    </div>
+
+    <h3>1 · Strength → Elo</h3>
+    <p>Each team has a World Football Elo rating. A 100-point gap means the stronger side has about a 64% "win expectancy" at a neutral venue. Home advantage adds <code>+65</code> Elo for the host side when the neutral toggle is off.</p>
+
+    <h3>2 · Elo → expected goals</h3>
+    <p>The rating gap <code>dr</code> becomes a goal supremacy: <code>S = dr / 165</code>, capped at ±2.8. With a baseline of <code>T = 2.6</code> total goals, each side's expected goals (xG) are <code>(T ± S) / 2</code>. The divisor 165 is calibrated so the goal model reproduces the Elo win expectancy almost exactly.</p>
+
+    <h3>3 · Expected goals → scoreline distribution</h3>
+    <p>Goals are modelled as Poisson processes, giving a probability for every scoreline from 0-0 up to 10-10. A Dixon-Coles correction (<code>ρ = −0.05</code>) nudges the low-scoring cells (0-0, 1-0, 0-1, 1-1) to better match how real football clusters around tight results. Win / draw / loss, over-under, both-teams-to-score and the most likely scorelines are all read straight off this one matrix, fully self-consistent.</p>
+
+    <h3>4 · Tournament → Monte Carlo</h3>
+    <p>The simulator samples actual goal counts from each team's Poisson, settles knockout draws on a lightly Elo-weighted penalty shootout, and replays the whole bracket 10,000 times to estimate title odds.</p>
+
+    <h3>Make it sharper</h3>
+    <p>The single biggest upgrade is fresher inputs: update the Elo table after every result. To go further you'd add squad availability (injuries/suspensions), rest days, and recent form. The engine is built so those become extra adjustments to <code>dr</code> and <code>T</code>, which is exactly what the Scout tab does.</p>
+
+    <div class="foot" id="srcline"></div>
+  </section>
+
+  <div style="text-align:center;padding:26px 0 4px;border-top:1px solid var(--line);margin-top:26px;font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:.08em">
+    GROUNDTRUTH · Software developed by <span style="color:var(--mint)">Matin Shahin</span>
+  </div>
+
+</div>
+
+<script>
+/* ============================== DATA ============================== */
+/* Elo as of 12 Jun 2026 for top sides (World Football Elo / eloratings.net);
+   remaining qualified/likely sides are best-estimate seeds. All editable. */
+const SEED=[
+ ["Spain","🇪🇸","UEFA",2157],["Argentina","🇦🇷","CONMEBOL",2115],["France","🇫🇷","UEFA",2063],
+ ["England","🏴","UEFA",2024],["Brazil","🇧🇷","CONMEBOL",1991],["Portugal","🇵🇹","UEFA",1989],
+ ["Colombia","🇨🇴","CONMEBOL",1982],["Netherlands","🇳🇱","UEFA",1948],["Ecuador","🇪🇨","CONMEBOL",1938],
+ ["Germany","🇩🇪","UEFA",1932],["Norway","🇳🇴","UEFA",1914],["Croatia","🇭🇷","UEFA",1912],
+ ["Switzerland","🇨🇭","UEFA",1895],["Uruguay","🇺🇾","CONMEBOL",1888],["Turkey","🇹🇷","UEFA",1880],
+ ["Japan","🇯🇵","AFC",1879],["Senegal","🇸🇳","CAF",1869],["Denmark","🇩🇰","UEFA",1862],
+ ["Morocco","🇲🇦","CAF",1858],["Belgium","🇧🇪","UEFA",1850],["Serbia","🇷🇸","UEFA",1822],
+ ["Scotland","🏴","UEFA",1818],["Austria","🇦🇹","UEFA",1815],["Mexico","🇲🇽","CONCACAF",1802],
+ ["Ukraine","🇺🇦","UEFA",1800],["USA","🇺🇸","CONCACAF",1795],["Wales","🏴","UEFA",1790],
+ ["South Korea","🇰🇷","AFC",1788],["Poland","🇵🇱","UEFA",1788],["Czechia","🇨🇿","UEFA",1772],
+ ["Algeria","🇩🇿","CAF",1768],["Nigeria","🇳🇬","CAF",1762],["Hungary","🇭🇺","UEFA",1760],
+ ["Greece","🇬🇷","UEFA",1758],["Egypt","🇪🇬","CAF",1755],["Iran","🇮🇷","AFC",1745],
+ ["Paraguay","🇵🇾","CONMEBOL",1742],["Slovakia","🇸🇰","UEFA",1740],["Australia","🇦🇺","AFC",1738],
+ ["Cameroon","🇨🇲","CAF",1735],["Canada","🇨🇦","CONCACAF",1735],["Romania","🇷🇴","UEFA",1730],
+ ["Ghana","🇬🇭","CAF",1720],["Ivory Coast","🇨🇮","CAF",1770],["South Africa","🇿🇦","CAF",1700],
+ ["Panama","🇵🇦","CONCACAF",1700],["Costa Rica","🇨🇷","CONCACAF",1670],["Uzbekistan","🇺🇿","AFC",1660],
+ ["Qatar","🇶🇦","AFC",1680],["Saudi Arabia","🇸🇦","AFC",1660],["Tunisia","🇹🇳","CAF",1690],
+ ["Cape Verde","🇨🇻","CAF",1640],["Jordan","🇯🇴","AFC",1640],["Honduras","🇭🇳","CONCACAF",1640],
+ ["Curaçao","🇨🇼","CONCACAF",1620],["New Zealand","🇳🇿","OFC",1610],["Haiti","🇭🇹","CONCACAF",1560],
+ ["Sweden","🇸🇪","UEFA",1810],["Bosnia and Herzegovina","🇧🇦","UEFA",1690],["DR Congo","🇨🇩","CAF",1712],["Iraq","🇮🇶","AFC",1648]
+];
+const LS="groundtruth.elo.v1";
+let TEAMS=load();
+function load(){try{const s=JSON.parse(localStorage.getItem(LS));if(s&&s.length)return s;}catch(e){}return SEED.map(t=>t.slice());}
+function save(){try{localStorage.setItem(LS,JSON.stringify(TEAMS));}catch(e){}}
+function byName(n){return TEAMS.find(t=>t[0]===n);}
+function flag(n){const t=byName(n);return t?t[1]:"⚑";}
+function elo(n){const t=byName(n);return t?+t[3]:1500;}
+
+/* scout adjustments */
+const LS2="groundtruth.scout.v1";
+let SCOUT=loadScout(), SCOUTON=false;
+const LSK="groundtruth.openrouter.v1";
+function getKey(){try{return localStorage.getItem(LSK+".key")||"";}catch(e){return "";}}
+function getModel(){try{return localStorage.getItem(LSK+".model")||"openai/gpt-4o-mini";}catch(e){return "openai/gpt-4o-mini";}}
+function setKey(k){try{localStorage.setItem(LSK+".key",k);}catch(e){}}
+function setModel(m){try{localStorage.setItem(LSK+".model",m||"openai/gpt-4o-mini");}catch(e){}}
+function loadScout(){try{return JSON.parse(localStorage.getItem(LS2))||{};}catch(e){return {};}}
+function saveScout(){try{localStorage.setItem(LS2,JSON.stringify(SCOUT));}catch(e){}}
+function adj(n){return (SCOUTON && SCOUT[n])? (+SCOUT[n].adj||0):0;}
+function eloEff(n){return elo(n)+adj(n);}
+
+/* match log */
+const LS3="groundtruth.log.v1";
+let MLOG=loadLog();
+function loadLog(){try{return JSON.parse(localStorage.getItem(LS3))||[];}catch(e){return [];}}
+function saveLog(){try{localStorage.setItem(LS3,JSON.stringify(MLOG));}catch(e){}}
+
+/* World Football Elo update */
+const KIMP={wcfinals:60,major:50,qualifier:40,tournament:30,friendly:20};
+function gIndex(gd){gd=Math.abs(gd);if(gd<=1)return 1;if(gd===2)return 1.5;return (11+gd)/8;}
+function eloUpdate(nH,nA,gh,ga,imp,neutral){
+  const Rh=elo(nH),Ra=elo(nA),homeAdv=neutral?0:100;
+  const Weh=1/(1+Math.pow(10,-(Rh-Ra+homeAdv)/400));
+  const Wh=gh>ga?1:gh===ga?0.5:0;
+  const dH=KIMP[imp]*gIndex(gh-ga)*(Wh-Weh);
+  byName(nH)[3]=Math.round(Rh+dH); byName(nA)[3]=Math.round(Ra-dH);
+  return Math.round(dH);
+}
+
+/* played results (actual scores) + which have been folded into Elo */
+const LS4="groundtruth.played.v1", LS5="groundtruth.applied.v1", LSB="groundtruth.backend.v1";
+let PLAYED=load4(), APPLIED=load5();
+function load4(){try{return JSON.parse(localStorage.getItem(LS4))||{};}catch(e){return {};}}
+function load5(){try{return JSON.parse(localStorage.getItem(LS5))||{};}catch(e){return {};}}
+function savePlayed(){try{localStorage.setItem(LS4,JSON.stringify(PLAYED));}catch(e){}}
+function saveApplied(){try{localStorage.setItem(LS5,JSON.stringify(APPLIED));}catch(e){}}
+function getBackend(){try{return localStorage.getItem(LSB)||"";}catch(e){return "";}}
+function setBackend(u){try{localStorage.setItem(LSB,u||"");}catch(e){}}
+function pairKey(a,b){return [a,b].slice().sort().join("|");}
+function playedFor(x,y){const p=PLAYED[pairKey(x,y)];if(!p)return null;
+  return p.h===x?{x:p.hg,y:p.ag}:{x:p.ag,y:p.hg};}
+
+/* actual results already played at WC 2026 (auto-seeded; Sync adds more) */
+const KNOWN_RESULTS=[
+ {h:"Mexico",a:"South Africa",hg:2,ag:0,neutral:false},
+ {h:"South Korea",a:"Czechia",hg:2,ag:1,neutral:true},
+ {h:"Canada",a:"Bosnia and Herzegovina",hg:1,ag:1,neutral:false},
+ {h:"USA",a:"Paraguay",hg:4,ag:1,neutral:false},
+ {h:"Qatar",a:"Switzerland",hg:1,ag:1,neutral:true},
+ {h:"Brazil",a:"Morocco",hg:1,ag:1,neutral:true},
+ {h:"Haiti",a:"Scotland",hg:0,ag:1,neutral:true}
+];
+function applyMatch(h,a,gh,ga,neutral,key,log){
+  const dH=eloUpdate(h,a,gh,ga,'wcfinals',neutral);
+  if(key)APPLIED[key]=true;
+  if(log!==false){MLOG.unshift({h,a,gh,ga,dH,t:Date.now()});MLOG=MLOG.slice(0,60);}
+  return dH;
+}
+function ingest(r){ // r={h,a,hg,ag,neutral}
+  if(!byName(r.h)||!byName(r.a))return;
+  const k=pairKey(r.h,r.a);
+  PLAYED[k]={h:r.h,a:r.a,hg:r.hg,ag:r.ag};
+  if(!APPLIED[k])applyMatch(r.h,r.a,r.hg,r.ag,r.neutral,k);
+}
+function ingestKnown(){KNOWN_RESULTS.forEach(ingest);save();savePlayed();saveApplied();saveLog();}
+
+/* ============================== MODEL ============================== */
+const T0=2.6, DIV=165, RHO=-0.05, HOME=65, MAXG=10;
+function pois(k,l){let p=Math.exp(-l);for(let i=1;i<=k;i++)p*=l/i;return p;}
+function lambdas(eA,eB,neutral){
+  const dr=(eA+(neutral?0:HOME))-eB;
+  let S=dr/DIV; S=Math.max(-2.8,Math.min(2.8,S));
+  return [Math.max(0.05,(T0+S)/2),Math.max(0.05,(T0-S)/2)];
+}
+function matrix(lh,la){
+  const ph=[],pa=[];
+  for(let i=0;i<=MAXG;i++){ph.push(pois(i,lh));pa.push(pois(i,la));}
+  const M=[];for(let i=0;i<=MAXG;i++){M.push([]);for(let j=0;j<=MAXG;j++)M[i][j]=ph[i]*pa[j];}
+  const tau=(i,j)=> i===0&&j===0?1-lh*la*RHO : i===0&&j===1?1+lh*RHO : i===1&&j===0?1+la*RHO : i===1&&j===1?1-RHO:1;
+  for(let i=0;i<2;i++)for(let j=0;j<2;j++)M[i][j]*=tau(i,j);
+  let s=0;for(let i=0;i<=MAXG;i++)for(let j=0;j<=MAXG;j++)s+=M[i][j];
+  for(let i=0;i<=MAXG;i++)for(let j=0;j<=MAXG;j++)M[i][j]/=s;
+  return M;
+}
+function analyze(nA,nB,neutral){
+  const lh_la=lambdas(eloEff(nA),eloEff(nB),neutral),lh=lh_la[0],la=lh_la[1];
+  const M=matrix(lh,la);
+  let w=0,d=0,l=0,o25=0,btts=0,csH=0,csA=0;
+  const cells=[];
+  for(let i=0;i<=MAXG;i++)for(let j=0;j<=MAXG;j++){
+    const p=M[i][j];
+    if(i>j)w+=p;else if(i===j)d+=p;else l+=p;
+    if(i+j>=3)o25+=p; if(i>=1&&j>=1)btts+=p; if(j===0)csH+=p; if(i===0)csA+=p;
+    cells.push([i,j,p]);
+  }
+  cells.sort((a,b)=>b[2]-a[2]);
+  return {lh,la,w,d,l,o25,btts,csH,csA,top:cells.slice(0,5),M};
+}
+
+/* ============================== PREDICT UI ============================== */
+function fillSelects(){
+  const a=document.getElementById('teamA'),b=document.getElementById('teamB');
+  const opts=TEAMS.slice().sort((x,y)=>y[3]-x[3]).map(t=>`<option>${t[0]}</option>`).join('');
+  a.innerHTML=opts;b.innerHTML=opts;
+  a.value="Spain";b.value="Germany";
+}
+function pct(x){return (x*100).toFixed(1);}
+function runPredict(){
+  const nA=document.getElementById('teamA').value, nB=document.getElementById('teamB').value;
+  const neutral=document.getElementById('neutral').checked;
+  if(nA===nB){document.getElementById('predOut').innerHTML='<div class="card" style="margin-top:18px;color:var(--amber)">Pick two different teams.</div>';return;}
+  const r=analyze(nA,nB,neutral);
+  const ms=r.top[0]; const fav=r.w>=r.l?nA:nB;
+  const heat=heatHTML(r.M);
+  document.getElementById('predOut').innerHTML=`
+  <div class="board">
+    <div class="board-top">
+      <div class="side side-h"><div class="sflag">${flag(nA)}</div><div class="tname">${nA}</div><div class="selo">ELO ${elo(nA)}${adj(nA)?` <span style="color:${adj(nA)>0?'var(--mint)':'var(--danger)'}">${adj(nA)>0?'+':''}${adj(nA)} scout</span>`:''}${neutral?'':' · +65 home'}</div></div>
+      <div class="score"><span class="vs">PREDICTED</span><span class="score-line">${ms[0]} - ${ms[1]}</span></div>
+      <div class="side side-a"><div class="sflag">${flag(nB)}</div><div class="tname">${nB}</div><div class="selo">ELO ${elo(nB)}${adj(nB)?` <span style="color:${adj(nB)>0?'var(--mint)':'var(--danger)'}">${adj(nB)>0?'+':''}${adj(nB)} scout</span>`:''}</div></div>
+    </div>
+    <div class="board-meta"><span>xG <b>${r.lh.toFixed(2)}</b> - <b>${r.la.toFixed(2)}</b></span><span>${neutral?'Neutral venue':'Home advantage on'}</span><span>conf. <b>${confLabel(r)}</b></span></div>
+    <div class="pitchbar">
+      <div class="pbar">
+        <div class="pseg seg-h" style="width:${r.w*100}%"><span>${pct(r.w)}%</span><small>${nA} win</small></div>
+        <div class="pseg seg-d" style="width:${r.d*100}%"><span>${pct(r.d)}%</span><small>Draw</small></div>
+        <div class="pseg seg-a" style="width:${r.l*100}%"><span>${pct(r.l)}%</span><small>${nB} win</small></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tiles">
+    <div class="tile"><div class="k">Over 2.5 goals</div><div class="v">${pct(r.o25)}<small>%</small></div></div>
+    <div class="tile"><div class="k">Both teams score</div><div class="v">${pct(r.btts)}<small>%</small></div></div>
+    <div class="tile"><div class="k">${nA} clean sheet</div><div class="v">${pct(r.csH)}<small>%</small></div></div>
+    <div class="tile"><div class="k">${nB} clean sheet</div><div class="v">${pct(r.csA)}<small>%</small></div></div>
+  </div>
+
+  <div class="grid2" style="margin-top:14px">
+    <div class="card">
+      <label class="fld">Most likely scorelines</label>
+      <div class="ladder">${r.top.map(c=>`
+        <div class="lrow"><span class="sl">${c[0]}-${c[1]}</span>
+        <div class="ltrack"><div class="lfill" style="width:${Math.min(100,c[2]/r.top[0][2]*100)}%"></div></div>
+        <span class="lp">${pct(c[2])}%</span></div>`).join('')}</div>
+    </div>
+    <div class="card">
+      <label class="fld">Scoreline heatmap · ${nA} (rows) vs ${nB} (cols)</label>
+      ${heat}
+    </div>
+  </div>
+
+  ${statsCard(nA,nB,r,neutral)}
+
+  <div class="analyst">
+    <div class="who"><span class="pulse"></span>Analyst read</div>
+    ${narrative(nA,nB,r,neutral).map(p=>`<p>${p}</p>`).join('')}
+  </div>`;
+}
+function confLabel(r){const m=Math.max(r.w,r.d,r.l);return m>0.6?'High':m>0.45?'Medium':'Low';}
+function projectStats(nA,nB,r,neutral){
+  const lh=r.lh,la=r.la,dr=(eloEff(nA)+(neutral?0:65))-eloEff(nB);
+  let pH=Math.round(50+13*Math.tanh(dr/180));pH=Math.max(32,Math.min(68,pH));const pA=100-pH;
+  const shH=Math.max(3,Math.round(3+lh*7)),shA=Math.max(3,Math.round(3+la*7));
+  const sotH=Math.min(shH,Math.max(1,Math.round(1+lh*2.7))),sotA=Math.min(shA,Math.max(1,Math.round(1+la*2.7)));
+  const offH=shH-sotH,offA=shA-sotA;
+  const coH=Math.max(1,Math.round(1.2+lh*3.2)),coA=Math.max(1,Math.round(1.2+la*3.2));
+  const edge=(pH-50)/10;
+  const foH=Math.max(6,Math.round(12.5-2.4*edge)),foA=Math.max(6,Math.round(12.5+2.4*edge));
+  const yH=Math.max(0,Math.round(foH*0.16-0.3)),yA=Math.max(0,Math.round(foA*0.16-0.3));
+  return {pH,pA,shH,shA,sotH,sotA,offH,offA,coH,coA,foH,foA,yH,yA};
+}
+function statRow(label,hv,av,suffix,dispH,dispA){
+  const tot=(hv+av)||1,lw=hv/tot*100,rw=av/tot*100,sfx=suffix||'';
+  return `<div class="statrow">
+    <span class="sv l">${dispH!==undefined?dispH:hv}${sfx}</span>
+    <div class="statmid"><div class="statlbl">${label}</div>
+      <div class="statbar"><i class="l" style="width:${lw}%"></i><i class="r" style="width:${rw}%"></i></div></div>
+    <span class="sv r">${dispA!==undefined?dispA:av}${sfx}</span></div>`;
+}
+function statsCard(nA,nB,r,neutral){
+  const s=projectStats(nA,nB,r,neutral),ms=r.top[0];
+  return `<div class="card" style="margin-top:14px">
+    <label class="fld">Match statistics projection · ${flag(nA)} ${nA} vs ${nB} ${flag(nB)}</label>
+    ${statRow('Goals (projected)',ms[0],ms[1])}
+    ${statRow('xG (expected goals)',r.lh,r.la,'',r.lh.toFixed(2),r.la.toFixed(2))}
+    ${statRow('Possession',s.pH,s.pA,'%')}
+    ${statRow('Total shots',s.shH,s.shA)}
+    ${statRow('Shots on target',s.sotH,s.sotA)}
+    ${statRow('Shots off / blocked',s.offH,s.offA)}
+    ${statRow('Corners',s.coH,s.coA)}
+    ${statRow('Fouls',s.foH,s.foA)}
+    ${statRow('Yellow cards',s.yH,s.yA)}
+    ${statRow('Red cards',0,0)}
+    <div class="scout-note" style="margin-top:10px">Scoreline and xG are model outputs; possession, shots, corners, fouls and cards are projections derived from xG and the strength gap.</div>
+  </div>`;
+}
+function heatHTML(M){
+  let max=0;for(let i=0;i<6;i++)for(let j=0;j<6;j++)max=Math.max(max,M[i][j]);
+  let h='<div class="heat"><div class="axis"></div>';
+  for(let j=0;j<6;j++)h+=`<div class="axis">${j}</div>`;
+  for(let i=0;i<6;i++){h+=`<div class="axis">${i}</div>`;
+    for(let j=0;j<6;j++){const v=M[i][j],a=Math.pow(v/max,.6);
+      h+=`<div class="hc" style="background:rgba(54,224,160,${(a*0.9+0.04).toFixed(3)})">${(v*100).toFixed(0)}</div>`;}}
+  return h+'</div>';
+}
+function narrative(nA,nB,r,neutral){
+  const out=[];const dg=elo(nA)-elo(nB);
+  const favName=r.w>=r.l?nA:nB, favP=Math.max(r.w,r.l), dogName=r.w>=r.l?nB:nA, dogP=Math.min(r.w,r.l);
+  const gap=Math.abs(dg);
+  let lead;
+  if(gap<40) lead=`This projects as a genuine coin-flip. The Elo gap is only ${gap.toFixed(0)} points, so the model leans only slightly toward <b>${favName}</b> at ${pct(favP)}%, with a high ${pct(r.d)}% draw chance, the kind of match decided by a single moment.`;
+  else if(gap<120) lead=`<b>${favName}</b> are favoured but far from safe, ${pct(favP)}% to win against ${pct(dogP)}% for <b>${dogName}</b>, and ${pct(r.d)}% says it ends level. A real upset is live here.`;
+  else if(gap<240) lead=`<b>${favName}</b> are clear favourites at ${pct(favP)}%. <b>${dogName}</b>'s path is to stay compact and steal it, but the model still gives them ${pct(dogP)}% plus ${pct(r.d)}% for a draw.`;
+  else lead=`A heavy mismatch on paper: <b>${favName}</b> sit at ${pct(favP)}% with the rating gap doing the talking. <b>${dogName}</b> winning (${pct(dogP)}%) would be a genuine shock.`;
+  out.push(lead);
+  const tot=r.lh+r.la;
+  let goals;
+  if(tot>3.0) goals=`Expect goals: combined xG of ${tot.toFixed(2)} pushes Over 2.5 to ${pct(r.o25)}% and both-teams-to-score to ${pct(r.btts)}%. An open game.`;
+  else if(tot<2.2) goals=`Lean toward a tight, low-scoring affair: combined xG of just ${tot.toFixed(2)} drops Over 2.5 to ${pct(r.o25)}%. Clean sheets are in play.`;
+  else goals=`Goal expectation is average (combined xG ${tot.toFixed(2)}); Over 2.5 sits near a coin-flip at ${pct(r.o25)}%.`;
+  out.push(goals);
+  const ms=r.top[0];
+  out.push(`Single most likely scoreline is <b>${ms[0]}-${ms[1]}</b> (${pct(ms[2])}%), though no exact score clears ${pct(r.top[0][2])}%, a reminder that scorelines are the noisiest thing to call.${neutral?'':` Home advantage is baked in for ${nA}.`}`);
+  return out;
+}
+
+/* ============================== SIMULATE ============================== */
+function buildSimTeams(){
+  const box=document.getElementById('simTeams');
+  const sorted=TEAMS.slice().sort((a,b)=>b[3]-a[3]);
+  box.innerHTML=sorted.map(t=>`<label class="chk" data-n="${t[0]}">
+    <input type="checkbox" value="${t[0]}">${t[1]} ${t[0]}<span class="e">${t[3]}</span></label>`).join('');
+  box.querySelectorAll('input').forEach(c=>c.addEventListener('change',e=>{
+    e.target.closest('.chk').classList.toggle('sel',e.target.checked);updateSelCount();}));
+}
+function selectedSim(){return [...document.querySelectorAll('#simTeams input:checked')].map(c=>c.value);}
+function updateSelCount(){
+  const n=selectedSim().length, size=+document.getElementById('bsize').value;
+  document.getElementById('selCount').textContent=`${n} / ${size} selected`;
+}
+function seedTop(){
+  const size=+document.getElementById('bsize').value;
+  const top=TEAMS.slice().sort((a,b)=>b[3]-a[3]).slice(0,size).map(t=>t[0]);
+  document.querySelectorAll('#simTeams input').forEach(c=>{c.checked=top.includes(c.value);c.closest('.chk').classList.toggle('sel',c.checked);});
+  updateSelCount();
+}
+function simMatch(eA,eB){ // returns 0 if A wins, 1 if B wins (knockout, neutral)
+  const l=lambdas(eA,eB,true);
+  const ga=samplePois(l[0]), gb=samplePois(l[1]);
+  if(ga>gb)return 0; if(gb>ga)return 1;
+  const pA=0.5+(eA-eB)/4000; return Math.random()<Math.max(.15,Math.min(.85,pA))?0:1;
+}
+function samplePois(l){let L=Math.exp(-l),k=0,p=1;do{k++;p*=Math.random();}while(p>L);return k-1;}
+function runSim(){
+  const teams=selectedSim(), size=+document.getElementById('bsize').value;
+  const out=document.getElementById('simOut');
+  if(teams.length!==size){out.innerHTML=`<div class="card" style="margin-top:18px;color:var(--amber)">Select exactly ${size} teams (you have ${teams.length}). Tip: use "Seed top by Elo".</div>`;return;}
+  const N=10000, wins={}, finals={}; teams.forEach(t=>{wins[t]=0;finals[t]=0;});
+  const seeded=teams.slice().sort((a,b)=>elo(b)-elo(a)); // standard 1vN bracket seeding
+  const order=bracketOrder(size).map(i=>seeded[i]);
+  for(let n=0;n<N;n++){
+    let round=order.slice();
+    while(round.length>1){
+      const next=[];
+      if(round.length===2){finals[round[0]]++;finals[round[1]]++;}
+      for(let i=0;i<round.length;i+=2){
+        const r=simMatch(elo(round[i]),elo(round[i+1]));
+        next.push(r===0?round[i]:round[i+1]);
+      }
+      round=next;
+    }
+    wins[round[0]]++;
+  }
+  const res=teams.map(t=>[t,wins[t]/N,finals[t]/N]).sort((a,b)=>b[1]-a[1]);
+  const max=res[0][1];
+  out.innerHTML=`<div class="card" style="margin-top:18px">
+    <label class="fld">Title probability · ${N.toLocaleString()} simulated brackets (${size} teams, neutral, penalties on draws)</label>
+    <div class="results-list">${res.map((r,i)=>`
+      <div class="rres"><span class="rk">${String(i+1).padStart(2,'0')}</span>
+      <span class="nm">${flag(r[0])} ${r[0]}</span>
+      <div class="rtrack"><div class="rfill" style="width:${Math.min(100,r[1]/max*100)}%"></div></div>
+      <span class="rp">${(r[1]*100).toFixed(1)}%</span></div>`).join('')}</div>
+    <div style="font-family:var(--mono);font-size:11px;color:var(--muted);margin-top:14px">Reach final %: ${res.slice(0,4).map(r=>`${r[0]} ${(r[2]*100).toFixed(0)}%`).join('  ·  ')}</div>
+  </div>`;
+}
+function bracketOrder(n){ // seeds positions so 1 meets 2 only in final
+  let seeds=[0,1];
+  while(seeds.length<n){const m=seeds.length*2-1;const next=[];for(const s of seeds){next.push(s);next.push(m-s);}seeds=next;}
+  return seeds;
+}
+
+/* ============================== RATINGS ============================== */
+function renderRatings(filter=''){
+  const body=document.getElementById('ratBody');
+  const f=filter.toLowerCase();
+  body.innerHTML=TEAMS.slice().sort((a,b)=>b[3]-a[3]).filter(t=>t[0].toLowerCase().includes(f)).map(t=>`
+    <tr><td>${t[1]} ${t[0]}</td><td style="color:var(--muted);font-family:var(--mono);font-size:12px">${t[2]}</td>
+    <td><input type="number" data-n="${t[0]}" value="${t[3]}"></td></tr>`).join('');
+  body.querySelectorAll('input').forEach(inp=>inp.addEventListener('change',e=>{
+    const t=byName(e.target.dataset.n); if(t){t[3]=+e.target.value;save();fillSelects();buildSimTeams();}
+  }));
+}
+
+/* ============================== SCOUT ============================== */
+function fillScoutSelects(){
+  const opts=TEAMS.slice().sort((x,y)=>y[3]-x[3]).map(t=>`<option>${t[0]}</option>`).join('');
+  const a=document.getElementById('scA'),b=document.getElementById('scB');
+  a.innerHTML=opts;b.innerHTML=opts;a.value="Spain";b.value="Germany";
+}
+function clamp45(x){x=Math.round(+x||0);return Math.max(-45,Math.min(45,x));}
+function scoutPromptText(){
+  const A=document.getElementById('scA').value,B=document.getElementById('scB').value;
+  const nA=document.getElementById('noteA').value.trim()||"(no specific news)";
+  const nB=document.getElementById('noteB').value.trim()||"(no specific news)";
+  return `You are a football scout. Convert qualitative team news into a small Elo rating adjustment for ONE upcoming match.
+Match: ${A} vs ${B}.
+${A} news: ${nA}
+${B} news: ${nB}
+
+Rules:
+- Output ONLY valid JSON. No prose, no markdown.
+- Each adjustment is an integer from -45 to 45 Elo points (negative = this news makes them weaker than their base rating implies for THIS match; positive = stronger).
+- Be conservative: most real adjustments fall within +-20. Use 0 if the news is not meaningful.
+JSON shape:
+{"home_adjust": <int>, "away_adjust": <int>, "home_reason": "<=12 words", "away_reason": "<=12 words"}`;
+}
+function buildPrompt(){
+  const txt=scoutPromptText();
+  document.getElementById('scoutPromptOut').innerHTML=
+    `<div class="scout-note">Copy this into Claude (or any AI), then paste its JSON reply below:</div><div class="codebox" id="promptBox">${txt.replace(/</g,'&lt;')}</div>`;
+  try{navigator.clipboard.writeText(txt);}catch(e){}
+}
+function applyScoutObj(obj){
+  const A=document.getElementById('scA').value,B=document.getElementById('scB').value;
+  SCOUT[A]={adj:clamp45(obj.home_adjust),reason:obj.home_reason||""};
+  SCOUT[B]={adj:clamp45(obj.away_adjust),reason:obj.away_reason||""};
+  saveScout();renderScoutState();
+  if(document.getElementById('scoutOn').checked) runPredict();
+}
+function applyScoutJSON(){
+  let raw=document.getElementById('scoutJSON').value.trim();
+  if(!raw){toastScout("Paste the AI's JSON first.",true);return;}
+  raw=raw.replace(/```json|```/g,'').trim();
+  try{applyScoutObj(JSON.parse(raw));toastScout("Adjustments applied.");}
+  catch(e){toastScout("Could not read that JSON. Check the format.",true);}
+}
+function scoutClear(){SCOUT={};saveScout();renderScoutState();runPredict();}
+function toastScout(msg,warn){const el=document.getElementById('scoutState');
+  el.dataset.msg=`<div class="scout-note" style="color:${warn?'var(--amber)':'var(--mint)'}">${msg}</div>`;renderScoutState();}
+function renderScoutState(){
+  const keys=Object.keys(SCOUT).filter(k=>byName(k));
+  const rows=keys.map(k=>{const a=+SCOUT[k].adj||0,cls=a>0?'up':a<0?'dn':'zero';
+    return `<div class="adjrow"><span class="nm">${flag(k)} ${k}</span>
+      <span class="delta ${cls}">${a>0?'+':''}${a} Elo</span>
+      ${SCOUT[k].reason?`<span class="rsn">${SCOUT[k].reason}</span>`:''}</div>`;}).join('');
+  const msg=document.getElementById('scoutState').dataset.msg||'';
+  document.getElementById('scoutState').dataset.msg='';
+  document.getElementById('scoutState').innerHTML=msg+
+    (rows?`<label class="fld" style="margin-top:14px">Active adjustments</label>${rows}`:
+    `<div class="scout-note" style="margin-top:14px">No adjustments yet.</div>`);
+}
+function refreshKeyPill(){
+  const pill=document.getElementById('proxyPill');
+  if(getKey()){pill.className="pill live";pill.textContent="● AI scout: key set ("+getModel()+")";}
+  else{pill.className="pill off";pill.textContent="● AI scout: no key (paste mode)";}
+}
+async function scoutAuto(){
+  const key=getKey();
+  if(!key){toastScout("Add an OpenRouter API key in Settings below, or use the paste prompt.",true);return;}
+  const A=document.getElementById('scA').value,B=document.getElementById('scB').value;
+  toastScout("Scouting via "+getModel()+"…");
+  try{
+    const res=await fetch("https://openrouter.ai/api/v1/chat/completions",{method:"POST",
+      headers:{"Authorization":"Bearer "+key,"Content-Type":"application/json","X-Title":"GROUNDTRUTH"},
+      body:JSON.stringify({model:getModel(),max_tokens:400,
+        response_format:{type:"json_object"},
+        messages:[{role:"user",content:scoutPromptText()}]})});
+    const data=await res.json();
+    if(data.error){toastScout("OpenRouter: "+(data.error.message||JSON.stringify(data.error)),true);return;}
+    let txt=(((data.choices||[])[0]||{}).message||{}).content||"";
+    txt=txt.replace(/```json|```/g,'').trim();
+    applyScoutObj(JSON.parse(txt));toastScout("Scout returned an adjustment.");
+  }catch(e){toastScout("Couldn't reach OpenRouter ("+e.message+").",true);}
+}
+function saveSettings(){
+  setKey(document.getElementById('orKey').value.trim());
+  setModel(document.getElementById('orModel').value.trim());
+  setBackend(document.getElementById('beUrl').value.trim());
+  refreshKeyPill();updateFixStatus();toastScout("Settings saved. Keys stay in this browser only.");
+}
+
+/* ============================== RESULTS UPDATER ============================== */
+function fillResultSelects(){
+  const opts=TEAMS.slice().sort((x,y)=>y[3]-x[3]).map(t=>`<option>${t[0]}</option>`).join('');
+  ['rsHome','rsAway'].forEach(id=>{const s=document.getElementById(id);const v=s.value;s.innerHTML=opts;s.value=v||(id==='rsHome'?'Spain':'Germany');});
+}
+function applyResult(){
+  const nH=document.getElementById('rsHome').value,nA=document.getElementById('rsAway').value;
+  const gh=+document.getElementById('rsGH').value,ga=+document.getElementById('rsGA').value;
+  const imp=document.getElementById('rsImp').value,neutral=document.getElementById('rsNeutral').checked;
+  if(nH===nA){toastLog("Pick two different teams.",true);return;}
+  if(isNaN(gh)||isNaN(ga)||gh<0||ga<0){toastLog("Enter valid goals.",true);return;}
+  const dH=eloUpdate(nH,nA,gh,ga,imp,neutral);
+  MLOG.unshift({h:nH,a:nA,gh,ga,dH,t:Date.now()});MLOG=MLOG.slice(0,40);saveLog();save();
+  fillSelects();fillScoutSelects();fillResultSelects();buildSimTeams();renderRatings(document.getElementById('ratSearch').value);renderLog();
+}
+function toastLog(m,w){document.getElementById('rsLog').dataset.msg=`<div class="scout-note" style="color:${w?'var(--amber)':'var(--mint)'}">${m}</div>`;renderLog();}
+function renderLog(){
+  const msg=document.getElementById('rsLog').dataset.msg||'';
+  document.getElementById('rsLog').dataset.msg='';
+  const rows=MLOG.map(m=>`<div class="logitem"><span class="res">${flag(m.h)} ${m.h} ${m.gh}-${m.ga} ${m.a} ${flag(m.a)}</span>
+    <span class="dl">${m.dH>0?'+':''}${m.dH} Elo</span></div>`).join('');
+  document.getElementById('rsLog').innerHTML=msg+(rows?`<label class="fld" style="margin-top:12px">Recent updates</label>${rows}`:'');
+}
+
+/* ============================== FIXTURES ============================== */
+const HOSTS=new Set(["Mexico","Canada","USA"]);
+const GROUPS={
+ A:["Mexico","South Africa","South Korea","Czechia"],
+ B:["Canada","Bosnia and Herzegovina","Qatar","Switzerland"],
+ C:["Brazil","Morocco","Haiti","Scotland"],
+ D:["USA","Paraguay","Australia","Turkey"],
+ E:["Germany","Curaçao","Ivory Coast","Ecuador"],
+ F:["Netherlands","Japan","Sweden","Tunisia"],
+ G:["Belgium","Egypt","Iran","New Zealand"],
+ H:["Spain","Cape Verde","Saudi Arabia","Uruguay"],
+ I:["France","Senegal","Iraq","Norway"],
+ J:["Argentina","Algeria","Austria","Jordan"],
+ K:["Portugal","DR Congo","Uzbekistan","Colombia"],
+ L:["England","Croatia","Ghana","Panama"]
+};
+// lambdas for a pairing, applying host home-edge if exactly one side is a host
+function pairLambdas(a,b){
+  const ah=HOSTS.has(a),bh=HOSTS.has(b);
+  if(ah&&!bh){const l=lambdas(eloEff(a),eloEff(b),false);return [l[0],l[1]];}
+  if(bh&&!ah){const l=lambdas(eloEff(b),eloEff(a),false);return [l[1],l[0]];}
+  const l=lambdas(eloEff(a),eloEff(b),true);return [l[0],l[1]];
+}
+function fixtureWDL(a,b){ // returns {w,d,l,score:[i,j]}
+  const ll=pairLambdas(a,b),M=matrix(ll[0],ll[1]);
+  let w=0,d=0,l=0,best=[0,0],bp=0;
+  for(let i=0;i<=MAXG;i++)for(let j=0;j<=MAXG;j++){const p=M[i][j];
+    if(i>j)w+=p;else if(i===j)d+=p;else l+=p;
+    if(p>bp){bp=p;best=[i,j];}}
+  return {w,d,l,score:best,lh:ll[0],la:ll[1]};
+}
+function simGroup(teams,N){
+  const pairs=[];for(let i=0;i<4;i++)for(let j=i+1;j<4;j++)pairs.push([teams[i],teams[j]]);
+  const PL=pairs.map(([a,b])=>{const p=playedFor(a,b);return p?[a,b,null,p.x,p.y]:[a,b,pairLambdas(a,b),0,0];});
+  const adv={},top={};teams.forEach(t=>{adv[t]=0;top[t]=0;});
+  for(let n=0;n<N;n++){
+    const pts={},gd={};teams.forEach(t=>{pts[t]=0;gd[t]=0;});
+    PL.forEach(([a,b,ll,fx,fy])=>{
+      let ga,gb;
+      if(ll){ga=samplePois(ll[0]);gb=samplePois(ll[1]);}else{ga=fx;gb=fy;}
+      gd[a]+=ga-gb;gd[b]+=gb-ga;
+      if(ga>gb)pts[a]+=3;else if(gb>ga)pts[b]+=3;else{pts[a]++;pts[b]++;}});
+    const rank=teams.slice().sort((x,y)=>pts[y]-pts[x]||gd[y]-gd[x]||Math.random()-0.5);
+    adv[rank[0]]++;adv[rank[1]]++;top[rank[0]]++;
+  }
+  return teams.map(t=>({t,adv:adv[t]/N,win:top[t]/N})).sort((x,y)=>y.adv-x.adv);
+}
+function renderFixtures(){
+  const out=document.getElementById('fixOut');let html='';
+  for(const g of Object.keys(GROUPS)){
+    const teams=GROUPS[g];
+    const odds=simGroup(teams,5000);
+    const chips=odds.map((o,i)=>`<span class="qchip ${i<2?'q1':''}">${flag(o.t)} ${o.t} <b>${(o.adv*100).toFixed(0)}%</b></span>`).join('');
+    let rows='';
+    for(let i=0;i<4;i++)for(let j=i+1;j<4;j++){
+      const a=teams[i],b=teams[j],pl=playedFor(a,b);
+      let mid;
+      if(pl){
+        const wcls=pl.x>pl.y?'win-h':pl.x<pl.y?'win-a':'win-d';
+        mid=`<div class="fxmid">
+          <span class="fxscore ${wcls}">${pl.x}-${pl.y}</span>
+          <span class="ftchip">FULL TIME</span></div>`;
+      }else{
+        const r=fixtureWDL(a,b);
+        mid=`<div class="fxmid">
+          <span class="fxscore">${r.score[0]}-${r.score[1]}</span>
+          <span class="fxbar"><i class="h" style="width:${r.w*100}%"></i><i class="d" style="width:${r.d*100}%"></i><i class="a" style="width:${r.l*100}%"></i></span>
+          <span class="fxpct"><span style="color:var(--amber)">${(r.w*100).toFixed(0)}</span>·${(r.d*100).toFixed(0)}·<span style="color:var(--blue)">${(r.l*100).toFixed(0)}</span></span></div>`;
+      }
+      rows+=`<div class="fxrow${pl?' done':''}">
+        <div class="fxt"><span class="fl">${flag(a)}</span><span class="nm">${a}${HOSTS.has(a)?' ·H':''}</span></div>
+        ${mid}
+        <div class="fxt away"><span class="nm">${b}${HOSTS.has(b)?' ·H':''}</span><span class="fl">${flag(b)}</span></div>
+      </div>`;
+    }
+    html+=`<div class="grpcard"><div class="grphd"><span class="gn">GROUP ${g}</span>
+      <span class="scout-note">qualify (top 2) odds:</span><div class="qodds">${chips}</div></div>${rows}</div>`;
+  }
+  out.innerHTML=html;
+}
+
+function updateFixStatus(){
+  const n=Object.keys(PLAYED).length;
+  const el=document.getElementById('fixStatus');
+  if(el)el.textContent=`${n} of 72 group matches loaded · ${getKey()?'OpenRouter ready':getBackend()?'backend set':'manual mode'}`;
+}
+function toastFix(m,warn){const el=document.getElementById('fixStatus');if(el){el.style.color=warn?'var(--amber)':'var(--mint)';el.textContent=m;}}
+async function fetchResultsViaAI(){
+  const key=getKey();
+  const prompt=`List every FINISHED match of the 2026 FIFA World Cup with its final score, as of today. Use these exact team names where they apply: ${TEAMS.map(t=>t[0]).join(', ')}. Output ONLY a JSON array, no prose, no markdown:
+[{"home":"<name>","away":"<name>","home_goals":<int>,"away_goals":<int>}]
+Include only matches that have actually finished with a confirmed final score.`;
+  const res=await fetch("https://openrouter.ai/api/v1/chat/completions",{method:"POST",
+    headers:{"Authorization":"Bearer "+key,"Content-Type":"application/json"},
+    body:JSON.stringify({model:getModel(),max_tokens:2000,plugins:[{id:"web"}],
+      messages:[{role:"user",content:prompt}]})});
+  const data=await res.json();
+  if(data.error)throw new Error(data.error.message||"API error");
+  let txt=(((data.choices||[])[0]||{}).message||{}).content||"";
+  txt=txt.replace(/```json|```/g,'').trim();
+  const mm=txt.match(/\[[\s\S]*\]/); if(mm)txt=mm[0];
+  return JSON.parse(txt);
+}
+async function syncResults(){
+  const base=getBackend(),key=getKey();
+  let arr=null;
+  try{
+    if(base){ toastFix("Fetching from backend…");
+      const r=await fetch(base.replace(/\/$/,'')+"/results"); const d=await r.json();
+      if(d.error)throw new Error(d.error); arr=d.results||d.matches||[];
+    }else if(key){ toastFix("Fetching latest results via OpenRouter (web search)…"); arr=await fetchResultsViaAI(); }
+    else { toastFix("Add an OpenRouter key in Scout → Settings to auto-update, or enter results in Ratings.",true); return; }
+  }catch(e){ toastFix("Update failed: "+e.message,true); return; }
+  let added=0;
+  (arr||[]).forEach(m=>{
+    const h=m.home,a=m.away,hg=+(m.home_goals),ag=+(m.away_goals);
+    if(!byName(h)||!byName(a)||isNaN(hg)||isNaN(ag))return;
+    const k=pairKey(h,a),isNew=!APPLIED[k];
+    PLAYED[k]={h,a,hg,ag};
+    if(isNew){applyMatch(h,a,hg,ag,!HOSTS.has(h),k);added++;}
+  });
+  save();savePlayed();saveApplied();saveLog();
+  fillSelects();fillScoutSelects();fillResultSelects();renderRatings(document.getElementById('ratSearch').value);renderLog();renderFixtures();runPredict();
+  setTimeout(()=>{toastFix(added?`Updated ${added} new result(s). Check the scores, then Export to share.`:"No new finished matches found.");setTimeout(updateFixStatus,4000);},50);
+}
+/* Export a fresh standalone HTML with current results baked in, for sharing */
+function exportHTML(){
+  document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('on',x.dataset.v==='predict'));
+  document.querySelectorAll('.view').forEach(v=>v.classList.toggle('on',v.id==='v-predict'));
+  ['predOut','fixOut','simOut','scoutPromptOut','scoutState','rsLog','fixStatus','promptBox'].forEach(id=>{const e=document.getElementById(id);if(e)e.innerHTML='';});
+  const orKeyEl=document.getElementById('orKey'); if(orKeyEl)orKeyEl.value='';
+  const arr=Object.values(PLAYED).map(p=>`{h:${JSON.stringify(p.h)},a:${JSON.stringify(p.a)},hg:${p.hg},ag:${p.ag},neutral:${!HOSTS.has(p.h)}}`);
+  const block="const KNOWN_RESULTS=[\n "+arr.join(",\n ")+"\n];";
+  let html="<!doctype html>\n"+document.documentElement.outerHTML;
+  html=html.replace(/const KNOWN_RESULTS=\[[\s\S]*?\];/, block.replace(/\$/g,'$$$$'));
+  const blob=new Blob([html],{type:"text/html"});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url; a.download='groundtruth-'+new Date().toISOString().slice(0,10)+'.html'; a.click();
+  setTimeout(()=>URL.revokeObjectURL(url),1000);
+  renderFixtures();runPredict();updateFixStatus();
+  toastFix(`Exported with ${arr.length} results baked in. Send that file to anyone, they just open it.`);
+}
+
+/* ============================== NAV ============================== */
+document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>{
+  document.querySelectorAll('.tab').forEach(x=>x.classList.remove('on'));t.classList.add('on');
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('on'));
+  document.getElementById('v-'+t.dataset.v).classList.add('on');
+}));
+document.getElementById('runPredict').addEventListener('click',runPredict);
+document.getElementById('runSim').addEventListener('click',runSim);
+document.getElementById('seedTop').addEventListener('click',seedTop);
+document.getElementById('bsize').addEventListener('change',updateSelCount);
+document.getElementById('ratSearch').addEventListener('input',e=>renderRatings(e.target.value));
+document.getElementById('resetRat').addEventListener('click',()=>{TEAMS=SEED.map(t=>t.slice());APPLIED={};PLAYED={};MLOG=[];save();savePlayed();saveApplied();saveLog();ingestKnown();renderRatings();renderLog();fillSelects();fillScoutSelects();fillResultSelects();buildSimTeams();renderFixtures();updateFixStatus();runPredict();});
+document.getElementById('scoutOn').addEventListener('change',e=>{SCOUTON=e.target.checked;runPredict();});
+document.getElementById('scoutPrompt').addEventListener('click',buildPrompt);
+document.getElementById('scoutApply').addEventListener('click',applyScoutJSON);
+document.getElementById('scoutClear').addEventListener('click',scoutClear);
+document.getElementById('scoutAuto').addEventListener('click',scoutAuto);
+document.getElementById('saveSettings').addEventListener('click',saveSettings);
+document.getElementById('exportFix').addEventListener('click',exportHTML);
+document.getElementById('syncFix').addEventListener('click',syncResults);
+document.getElementById('rsApply').addEventListener('click',applyResult);
+document.getElementById('srcline').textContent='Elo seed: World Football Elo Ratings (eloratings.net), 12 Jun 2026 snapshot · model calibrated so a 100-pt gap ≈ 64% win expectancy · results updater uses the official WFE formula · all probabilities are model estimates, not guarantees.';
+
+/* init */
+ingestKnown();
+document.getElementById('orKey').value=getKey();
+document.getElementById('orModel').value=getModel();
+document.getElementById('beUrl').value=getBackend();
+refreshKeyPill();
+fillSelects();fillScoutSelects();fillResultSelects();buildSimTeams();renderRatings();renderScoutState();renderLog();renderFixtures();updateFixStatus();seedTop();runPredict();
+</script>
+</body>
+</html>

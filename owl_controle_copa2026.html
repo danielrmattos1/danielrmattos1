@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Controle de Banca OWL — Copa 2026</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #1a1a2e;
+            color: #e0e0e0;
+            padding: 2rem 1rem;
+        }
+        .container { max-width: 1400px; margin: 0 auto; }
+        h1 { font-size: 1.6rem; margin-bottom: 0.25rem; color: #fff; }
+        .subtitle { font-size: 0.8rem; color: #888; margin-bottom: 1.5rem; }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        .card {
+            background: #16213e;
+            border-radius: 1rem;
+            border: 1px solid #0f3460;
+            padding: 1rem;
+        }
+        .card-label { font-size: 0.75rem; color: #888; margin-bottom: 0.25rem; }
+        .card-value { font-size: 1.6rem; font-weight: 600; }
+        .green { color: #4ade80; }
+        .red { color: #f87171; }
+        .yellow { color: #fbbf24; }
+
+        .banca-bar-wrap { margin-bottom: 1.5rem; }
+        .banca-bar-bg { background: #0f3460; border-radius: 8px; height: 8px; overflow: hidden; }
+        .banca-bar-fill { background: linear-gradient(90deg, #4ade80, #22c55e); width: 100%; height: 8px; transition: width 0.3s; }
+        .banca-bar-label { display: flex; justify-content: space-between; font-size: 0.7rem; color: #888; margin-top: 4px; }
+
+        .form-area, .banca-form {
+            background: #16213e;
+            border-radius: 1rem;
+            border: 1px solid #0f3460;
+            padding: 1.25rem;
+            margin-bottom: 1.5rem;
+        }
+        .form-title { font-weight: 600; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; color: #fff; }
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+        }
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .form-group label { font-size: 0.75rem; color: #888; }
+        .form-group input, .form-group select {
+            height: 2.25rem;
+            padding: 0 0.5rem;
+            border: 1px solid #0f3460;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            background: #1a1a2e;
+            color: #e0e0e0;
+        }
+        .form-group input:focus, .form-group select:focus { border-color: #4ade80; outline: none; }
+        .btn {
+            padding: 0 1rem;
+            height: 2.25rem;
+            border-radius: 8px;
+            border: 1px solid #0f3460;
+            background: transparent;
+            color: #e0e0e0;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.8rem;
+        }
+        .btn:hover { background: #0f3460; }
+        .btn-primary { background: #4ade80; color: #1a1a2e; border: none; font-weight: 600; }
+        .btn-primary:hover { background: #22c55e; }
+        .btn-danger { color: #f87171; border-color: #7f1d1d; }
+        .btn-danger:hover { background: #7f1d1d; }
+        .btn-sm { height: 28px; padding: 0 8px; font-size: 0.7rem; }
+        .actions { margin-top: 1rem; display: flex; gap: 0.5rem; flex-wrap: wrap; }
+
+        .table-wrap {
+            background: #16213e;
+            border-radius: 1rem;
+            border: 1px solid #0f3460;
+            overflow-x: auto;
+            margin-bottom: 1.5rem;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.8rem;
+            min-width: 1100px;
+        }
+        th {
+            background: #0f3460;
+            padding: 0.75rem;
+            text-align: left;
+            font-weight: 500;
+            color: #888;
+            border-bottom: 1px solid #0f3460;
+        }
+        td {
+            padding: 0.75rem;
+            border-bottom: 1px solid #0f3460;
+            vertical-align: middle;
+        }
+        tr:hover td { background: #1a1a3e; }
+
+        .badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 500;
+        }
+        .badge-win { background: #14532d; color: #4ade80; }
+        .badge-loss { background: #7f1d1d; color: #f87171; }
+        .badge-pending { background: #713f12; color: #fbbf24; }
+        .badge-cashout { background: #1e3a5f; color: #60a5fa; }
+        .tier-badge {
+            font-size: 0.7rem;
+            font-weight: bold;
+            padding: 2px 6px;
+            border-radius: 12px;
+        }
+        .tier-s { background: #7f1d1d; color: #f87171; }
+        .tier-a { background: #7c2d12; color: #fb923c; }
+        .tier-b { background: #14532d; color: #4ade80; }
+        .pl-pos { color: #4ade80; font-weight: 500; }
+        .pl-neg { color: #f87171; font-weight: 500; }
+        .freebet { font-size: 0.65rem; color: #fbbf24; font-style: italic; }
+        .footer { text-align: center; font-size: 0.7rem; color: #555; margin-top: 2rem; }
+
+        @media (max-width: 640px) {
+            .form-row { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+        <div>
+            <h1>⚽ Controle de Banca — Copa 2026</h1>
+            <div class="subtitle">OWL Agent · Mercado 1x2 · KTO · Atualizado em 14/06/2026</div>
+        </div>
+        <div style="display: flex; gap: 0.5rem;">
+            <button class="btn" onclick="exportarCSV()"><i class="ti ti-download"></i> Exportar CSV</button>
+            <button class="btn btn-danger" onclick="resetarTudo()"><i class="ti ti-refresh"></i> Resetar</button>
+        </div>
+    </div>
+
+    <div class="cards">
+        <div class="card"><div class="card-label">Banca atual</div><div class="card-value green" id="bancaAtual">R$0,00</div></div>
+        <div class="card"><div class="card-label">Lucro / Perda</div><div class="card-value" id="lucro">R$0,00</div></div>
+        <div class="card"><div class="card-label">Apostas</div><div class="card-value" id="totalApostas">0</div></div>
+        <div class="card"><div class="card-label">Acertos</div><div class="card-value" id="acertos">0 / 0</div></div>
+        <div class="card"><div class="card-label">Taxa acerto</div><div class="card-value" id="taxa">0%</div></div>
+        <div class="card"><div class="card-label">ROI</div><div class="card-value" id="roi">0%</div></div>
+        <div class="card"><div class="card-label">Em aberto</div><div class="card-value yellow" id="emAberto">R$0,00</div></div>
+        <div class="card"><div class="card-label">Stake total</div><div class="card-value" id="stakeTotal">R$0,00</div></div>
+    </div>
+
+    <div class="banca-bar-wrap">
+        <div class="banca-bar-bg"><div class="banca-bar-fill" id="barraBanca" style="width:100%"></div></div>
+        <div class="banca-bar-label"><span>R$0</span><span id="barraTexto">—</span><span>R$300</span></div>
+    </div>
+
+    <div class="banca-form">
+        <div class="form-title"><i class="ti ti-wallet"></i> Configuração da Banca</div>
+        <div class="form-row">
+            <div class="form-group">
+                <label>Banca inicial (R$)</label>
+                <input type="number" id="bancaInicialInput" step="1" min="0" value="50">
+            </div>
+            <div class="form-group">
+                <label>&nbsp;</label>
+                <button class="btn btn-primary" onclick="alterarBancaInicial()">Atualizar banca</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-area">
+        <div class="form-title"><i class="ti ti-plus"></i> <span id="formTitle">Registrar nova aposta</span></div>
+        <div class="form-row">
+            <div class="form-group"><label>Data do jogo (AAAA-MM-DD)</label><input type="date" id="dataJogo"></div>
+            <div class="form-group"><label>Jogo</label><input type="text" id="jogo" placeholder="Brasil vs Argentina"></div>
+        </div>
+        <div class="form-row">
+            <div class="form-group"><label>Mercado (time ou Empate)</label><input type="text" id="mercado" placeholder="Empate"></div>
+            <div class="form-group"><label>Casa</label><select id="casa"><option>KTO</option><option>Pinnacle</option><option>Bet365</option></select></div>
+        </div>
+        <div class="form-row">
+            <div class="form-group"><label>Odd</label><input type="number" id="odd" step="0.01" min="1.01" placeholder="3.95"></div>
+            <div class="form-group"><label>Stake (R$)</label><input type="number" id="stake" step="0.50" min="0.50" value="0.5"></div>
+        </div>
+        <div class="form-row">
+            <div class="form-group"><label>EV estimado (%)</label><input type="number" id="ev" step="0.01" placeholder="15.36"></div>
+            <div class="form-group"><label>Tier</label><select id="tier"><option value="">—</option><option value="S">S (≥10%)</option><option value="A">A (5-10%)</option><option value="B">B (3-5%)</option></select></div>
+        </div>
+        <div class="actions">
+            <button class="btn btn-primary" id="btnRegistrar" onclick="registrarOuAtualizar()"><i class="ti ti-check"></i> Registrar aposta</button>
+            <button class="btn" id="btnCancelarEdicao" onclick="cancelarEdicao()" style="display:none;"><i class="ti ti-x"></i> Cancelar</button>
+        </div>
+    </div>
+
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr><th>Data</th><th>Jogo</th><th>Mercado</th><th>Casa</th><th>Odd</th><th>Stake</th><th>EV</th><th>Tier</th><th>Resultado</th><th>P&L</th><th>Cashout</th><th>Ações</th></tr>
+            </thead>
+            <tbody id="tabelaBody">
+            </tbody>
+        </table>
+    </div>
+    <div class="footer">OWL Football Agent · Dados salvos no localStorage · Backup CSV disponível</div>
+</div>
+
+<script>
+    const STORAGE_KEY = 'owl_copa2026_v1';
+    let apostas = [];
+    let bancaInicial = 50;
+    let apostaEmEdicao = null;
+
+    function escapeHtml(str) {
+        if (!str) return '';
+        return str.replace(/[&<>]/g, function(m) {
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            return m;
+        });
+    }
+
+    function escapeCSV(str) {
+        if (str === undefined || str === null) return '';
+        let s = String(str);
+        if (s.includes(';') || s.includes('"') || s.includes('\n')) {
+            s = '"' + s.replace(/"/g, '""') + '"';
+        }
+        return s;
+    }
+
+    function obterDataLocalHoje() {
+        const hoje = new Date();
+        const fuso = hoje.getTimezoneOffset() * 60000;
+        const dataLocal = new Date(hoje.getTime() - fuso);
+        return dataLocal.toISOString().split('T')[0];
+    }
+
+    // Dados iniciais - apostas registradas em 14/06/2026
+    // NOTA: cashout com azaroes em odds altas pode salvar o stake (ex: Bosnia abriu placar, deveria ter feito cashout)
+    const APOSTAS_INICIAIS = [
+        {data:"2026-06-07",jogo:"Brasil vs Marrocos",mercado:"Empate",casa:"KTO",odd:3.95,stake:50,ev:50.1,tier:"S",resultado:"win",pl:147.50,freebet:true},
+        {data:"2026-06-12",jogo:"Canadá vs Bósnia & Herzegovina",mercado:"Bósnia",casa:"KTO",odd:4.75,stake:0.5,ev:9.7,tier:"S",resultado:"loss",pl:-0.50},
+        {data:"2026-06-12",jogo:"EUA vs Paraguai",mercado:"EUA",casa:"KTO",odd:2.12,stake:0.5,ev:7.1,tier:"S",resultado:"win",pl:0.56},
+        {data:"2026-06-13",jogo:"Austrália vs Turquia",mercado:"Austrália",casa:"KTO",odd:6.0,stake:0.5,ev:10.5,tier:"S",resultado:"cashout",pl:0.68,cashoutValor:1.18},
+        {data:"2026-06-13",jogo:"Arábia Saudita vs Uruguai",mercado:"Arábia Saudita",casa:"KTO",odd:9.0,stake:0.5,ev:null,tier:null,resultado:"cashout",pl:0.00,cashoutValor:0.50},
+        {data:"2026-06-14",jogo:"Suécia vs Tunísia",mercado:"Tunísia",casa:"KTO",odd:4.4,stake:0.5,ev:5.57,tier:"S",resultado:"pending",pl:null},
+        {data:"2026-06-15",jogo:"Bélgica vs Egito",mercado:"Egito",casa:"KTO",odd:6.1,stake:0.5,ev:5.9,tier:"S",resultado:"pending",pl:null},
+        {data:"2026-06-15",jogo:"Espanha vs Cabo Verde",mercado:"Cabo Verde",casa:"KTO",odd:26.0,stake:0.5,ev:23.05,tier:"S",resultado:"pending",pl:null},
+        {data:"2026-06-16",jogo:"França vs Senegal",mercado:"Senegal",casa:"KTO",odd:8.0,stake:0.5,ev:5.57,tier:"S",resultado:"pending",pl:null},
+        {data:"2026-06-16",jogo:"Argentina vs Argélia",mercado:"Argélia",casa:"KTO",odd:10.0,stake:0.5,ev:6.08,tier:"S",resultado:"pending",pl:null},
+        {data:"2026-06-17",jogo:"Áustria vs Jordânia",mercado:"Empate",casa:"KTO",odd:5.8,stake:0.5,ev:3.14,tier:"A",resultado:"pending",pl:null},
+        {data:"2026-06-17",jogo:"Inglaterra vs Croácia",mercado:"Croácia",casa:"KTO",odd:5.4,stake:0.5,ev:2.79,tier:"B",resultado:"pending",pl:null},
+        {data:"2026-06-18",jogo:"Suíça vs Bósnia e Herzegovina",mercado:"Bósnia e Herzegovina",casa:"KTO",odd:6.25,stake:0.5,ev:10.53,tier:"S",resultado:"pending",pl:null},
+        {data:"2026-06-18",jogo:"Chéquia vs África do Sul",mercado:"África do Sul",casa:"KTO",odd:4.9,stake:0.5,ev:6.29,tier:"S",resultado:"pending",pl:null},
+        {data:"2026-06-18",jogo:"Canadá vs Catar",mercado:"Catar",casa:"KTO",odd:12.5,stake:0.5,ev:10.62,tier:"S",resultado:"pending",pl:null},
+        {data:"2026-06-19",jogo:"EUA vs Austrália",mercado:"Austrália",casa:"KTO",odd:5.0,stake:0.5,ev:11.13,tier:"S",resultado:"pending",pl:null},
+        {data:"2026-06-22",jogo:"Nova Zelândia vs Egito",mercado:"Nova Zelândia",casa:"KTO",odd:5.3,stake:0.5,ev:15.36,tier:"S",resultado:"pending",pl:null}
+    ];
+
+    function carregar() {
+        const dados = localStorage.getItem(STORAGE_KEY);
+        if (dados) {
+            try {
+                const obj = JSON.parse(dados);
+                apostas = obj.apostas || [];
+                bancaInicial = obj.bancaInicial ?? 50;
+            } catch(e) { apostas = []; bancaInicial = 50; }
+        } else {
+            // Primeira carga - usar dados iniciais
+            apostas = APOSTAS_INICIAIS.map(a => ({...a}));
+            bancaInicial = 50;
+            salvar();
+        }
+        document.getElementById('bancaInicialInput').value = bancaInicial;
+        atualizarTudo();
+    }
+
+    function salvar() {
+        const obj = { apostas, bancaInicial };
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(obj));
+    }
+
+    function alterarBancaInicial() {
+        const novoValor = parseFloat(document.getElementById('bancaInicialInput').value);
+        if (!isNaN(novoValor) && novoValor >= 0) {
+            bancaInicial = novoValor;
+            salvar();
+            atualizarTudo();
+        } else {
+            alert('Valor inválido para banca inicial.');
+        }
+    }
+
+    function calcularMetricas() {
+        let banca = bancaInicial;
+        let wins = 0;
+        let finalizadas = 0;
+        let stakeTotal = 0;
+        let stakeAberto = 0;
+        let plTotal = 0;
+        for (let a of apostas) {
+            stakeTotal += a.stake;
+            if (a.resultado === 'win') {
+                banca += a.stake * (a.odd - 1);
+                wins++;
+                finalizadas++;
+                plTotal += a.stake * (a.odd - 1);
+            } else if (a.resultado === 'loss') {
+                banca -= a.stake;
+                finalizadas++;
+                plTotal -= a.stake;
+            } else if (a.resultado === 'cashout' && typeof a.cashoutValor === 'number') {
+                banca += (a.cashoutValor - a.stake);
+                finalizadas++;
+                plTotal += (a.cashoutValor - a.stake);
+            } else if (a.resultado === 'pending') {
+                stakeAberto += a.stake;
+            }
+        }
+        const lucro = banca - bancaInicial;
+        const roi = stakeTotal > 0 ? (plTotal / stakeTotal) * 100 : 0;
+        const taxa = finalizadas > 0 ? (wins / finalizadas) * 100 : 0;
+        return { banca, lucro, total: apostas.length, finalizadas, wins, roi, taxa, stakeTotal, stakeAberto, plTotal };
+    }
+
+    function atualizarTudo() {
+        const m = calcularMetricas();
+        document.getElementById('bancaAtual').textContent = 'R$' + m.banca.toFixed(2);
+        document.getElementById('bancaAtual').className = 'card-value ' + (m.banca >= bancaInicial ? 'green' : 'red');
+        const lucroStr = (m.lucro >= 0 ? '+' : '') + 'R$' + m.lucro.toFixed(2);
+        document.getElementById('lucro').textContent = lucroStr;
+        document.getElementById('lucro').className = 'card-value ' + (m.lucro > 0 ? 'green' : (m.lucro < 0 ? 'red' : ''));
+        document.getElementById('totalApostas').textContent = m.total;
+        document.getElementById('acertos').textContent = m.wins + ' / ' + m.finalizadas;
+        document.getElementById('taxa').textContent = m.taxa.toFixed(0) + '%';
+        document.getElementById('roi').textContent = (m.roi >= 0 ? '+' : '') + m.roi.toFixed(1) + '%';
+        document.getElementById('roi').className = 'card-value ' + (m.roi > 0 ? 'green' : (m.roi < 0 ? 'red' : ''));
+        document.getElementById('emAberto').textContent = 'R$' + m.stakeAberto.toFixed(2);
+        document.getElementById('stakeTotal').textContent = 'R$' + m.stakeTotal.toFixed(2);
+
+        const maxBanca = Math.max(bancaInicial * 2, m.banca * 1.2, 300);
+        const pct = Math.min(100, Math.max(0, (m.banca / maxBanca) * 100));
+        document.getElementById('barraBanca').style.width = pct + '%';
+        document.getElementById('barraBanca').style.background = m.banca >= bancaInicial
+            ? 'linear-gradient(90deg, #4ade80, #22c55e)'
+            : 'linear-gradient(90deg, #f87171, #ef4444)';
+        document.getElementById('barraTexto').textContent = 'R$' + m.banca.toFixed(2) + ' (banca inicial: R$' + bancaInicial.toFixed(2) + ')';
+
+        renderizarTabela();
+    }
+
+    function renderizarTabela() {
+        const tbody = document.getElementById('tabelaBody');
+        if (!apostas.length) {
+            tbody.innerHTML = '<tr><td colspan="12" style="text-align:center;color:#888;">Nenhuma aposta registrada.</td></tr>';
+            return;
+        }
+        let html = '';
+        // Ordenar por data decrescente (mais recente primeiro)
+        const sorted = [...apostas].sort((a,b) => (b.data||'').localeCompare(a.data||''));
+        const idxMap = sorted.map(s => apostas.indexOf(s));
+
+        for (let i = 0; i < sorted.length; i++) {
+            const a = sorted[i];
+            const realIdx = idxMap[i];
+            let plLiquido = a.pl !== null && a.pl !== undefined ? a.pl : null;
+            let cashoutBruto = '';
+            if (plLiquido === null) {
+                if (a.resultado === 'win') plLiquido = +(a.stake * (a.odd - 1)).toFixed(2);
+                else if (a.resultado === 'loss') plLiquido = -a.stake;
+                else if (a.resultado === 'cashout' && typeof a.cashoutValor === 'number') {
+                    plLiquido = +(a.cashoutValor - a.stake).toFixed(2);
+                    cashoutBruto = 'R$' + a.cashoutValor.toFixed(2);
+                }
+            }
+            if (a.resultado === 'cashout' && !cashoutBruto && typeof a.cashoutValor === 'number') {
+                cashoutBruto = 'R$' + a.cashoutValor.toFixed(2);
+            }
+
+            const plStr = plLiquido === null ? '—' : (plLiquido >= 0 ? '+' : '') + 'R$' + Math.abs(plLiquido).toFixed(2);
+            const plClass = (plLiquido === null) ? '' : (plLiquido >= 0 ? 'pl-pos' : 'pl-neg');
+            const freebetLabel = a.freebet ? '<span class="freebet"> [FREE BET]</span>' : '';
+
+            let evHtml = '—';
+            if (a.ev) {
+                const percent = Math.min(100, a.ev * 2);
+                evHtml = `<div style="display:inline-block;width:40px;background:#0f3460;border-radius:4px;margin-right:4px;vertical-align:middle;"><div style="background:#4ade80;width:${percent}%;height:4px;border-radius:4px;"></div></div>${a.ev.toFixed(1)}%`;
+            }
+            const tierHtml = a.tier ? `<span class="tier-badge tier-${a.tier.toLowerCase()}">${a.tier}</span>` : '—';
+            let badge = '';
+            if (a.resultado === 'win') badge = '<span class="badge badge-win">✓ Ganhou</span>';
+            else if (a.resultado === 'loss') badge = '<span class="badge badge-loss">✗ Perdeu</span>';
+            else if (a.resultado === 'cashout') badge = '<span class="badge badge-cashout">⟳ Cashout</span>';
+            else badge = '<span class="badge badge-pending">⏳ Pendente</span>';
+
+            let botoes = '';
+            if (a.resultado === 'pending') {
+                botoes = `<div style="display:flex;gap:4px;flex-wrap:wrap;">
+                    <button class="btn btn-sm" onclick="editarAposta(${realIdx})" title="Editar"><i class="ti ti-edit"></i></button>
+                    <button class="btn btn-sm" style="background:#14532d;color:#4ade80" onclick="marcarResultado(${realIdx},'win')" title="Ganhou"><i class="ti ti-check"></i></button>
+                    <button class="btn btn-sm" style="background:#7f1d1d;color:#f87171" onclick="marcarResultado(${realIdx},'loss')" title="Perdeu"><i class="ti ti-x"></i></button>
+                    <button class="btn btn-sm" style="background:#1e3a5f;color:#60a5fa" onclick="fazerCashout(${realIdx})" title="Cashout"><i class="ti ti-currency-dollar"></i></button>
+                </div>`;
+            } else {
+                botoes = `<div style="display:flex;gap:4px;">
+                    <button class="btn btn-sm" onclick="editarAposta(${realIdx})" title="Editar"><i class="ti ti-edit"></i></button>
+                    <button class="btn btn-sm btn-danger" onclick="removerAposta(${realIdx})" title="Remover"><i class="ti ti-trash"></i></button>
+                </div>`;
+            }
+
+            html += `<tr>
+                <td style="white-space:nowrap">${escapeHtml(a.data || '—')}</td>
+                <td><strong>${escapeHtml(a.jogo)}${freebetLabel}</strong></td>
+                <td>${escapeHtml(a.mercado)}</td>
+                <td>${escapeHtml(a.casa)}</td>
+                <td>${a.odd.toFixed(2)}</td>
+                <td>R$${a.stake.toFixed(2)}</td>
+                <td>${evHtml}</td>
+                <td>${tierHtml}</td>
+                <td>${badge}</td>
+                <td class="${plClass}">${plStr}</td>
+                <td>${cashoutBruto || '—'}</td>
+                <td>${botoes}</td>
+            </tr>`;
+        }
+        tbody.innerHTML = html;
+    }
+
+    function registrarOuAtualizar() {
+        const data = document.getElementById('dataJogo').value;
+        const jogo = document.getElementById('jogo').value.trim();
+        const mercado = document.getElementById('mercado').value.trim();
+        const casa = document.getElementById('casa').value;
+        const odd = parseFloat(document.getElementById('odd').value);
+        const stake = parseFloat(document.getElementById('stake').value);
+        const ev = parseFloat(document.getElementById('ev').value);
+        const tier = document.getElementById('tier').value;
+
+        if (!data || !jogo || !mercado || isNaN(odd) || isNaN(stake)) {
+            alert('Preencha todos os campos obrigatórios (data, jogo, mercado, odd, stake).');
+            return;
+        }
+        const novaAposta = {
+            data, jogo, mercado, casa,
+            odd, stake,
+            ev: isNaN(ev) ? null : ev,
+            tier: tier || null,
+            resultado: 'pending',
+            freebet: false
+        };
+        if (apostaEmEdicao !== null) {
+            novaAposta.resultado = apostas[apostaEmEdicao].resultado;
+            novaAposta.pl = apostas[apostaEmEdicao].pl;
+            novaAposta.cashoutValor = apostas[apostaEmEdicao].cashoutValor;
+            novaAposta.freebet = apostas[apostaEmEdicao].freebet;
+            apostas[apostaEmEdicao] = novaAposta;
+            apostaEmEdicao = null;
+            document.getElementById('formTitle').innerHTML = '<i class="ti ti-plus"></i> Registrar nova aposta';
+            document.getElementById('btnRegistrar').innerHTML = '<i class="ti ti-check"></i> Registrar aposta';
+            document.getElementById('btnCancelarEdicao').style.display = 'none';
+        } else {
+            apostas.push(novaAposta);
+        }
+        salvar();
+        cancelarEdicao();
+        atualizarTudo();
+    }
+
+    function editarAposta(idx) {
+        const a = apostas[idx];
+        document.getElementById('dataJogo').value = a.data || '';
+        document.getElementById('jogo').value = a.jogo || '';
+        document.getElementById('mercado').value = a.mercado || '';
+        document.getElementById('casa').value = a.casa || 'KTO';
+        document.getElementById('odd').value = a.odd;
+        document.getElementById('stake').value = a.stake;
+        document.getElementById('ev').value = a.ev !== null ? a.ev : '';
+        document.getElementById('tier').value = a.tier || '';
+        apostaEmEdicao = idx;
+        document.getElementById('formTitle').innerHTML = '<i class="ti ti-edit"></i> Editando aposta';
+        document.getElementById('btnRegistrar').innerHTML = '<i class="ti ti-device-floppy"></i> Salvar edição';
+        document.getElementById('btnCancelarEdicao').style.display = 'inline-flex';
+    }
+
+    function cancelarEdicao() {
+        document.getElementById('dataJogo').value = obterDataLocalHoje();
+        document.getElementById('jogo').value = '';
+        document.getElementById('mercado').value = '';
+        document.getElementById('casa').value = 'KTO';
+        document.getElementById('odd').value = '';
+        document.getElementById('stake').value = '0.5';
+        document.getElementById('ev').value = '';
+        document.getElementById('tier').value = '';
+        apostaEmEdicao = null;
+        document.getElementById('formTitle').innerHTML = '<i class="ti ti-plus"></i> Registrar nova aposta';
+        document.getElementById('btnRegistrar').innerHTML = '<i class="ti ti-check"></i> Registrar aposta';
+        document.getElementById('btnCancelarEdicao').style.display = 'none';
+    }
+
+    function marcarResultado(idx, resultado) {
+        apostas[idx].resultado = resultado;
+        if (resultado === 'win') apostas[idx].pl = +(apostas[idx].stake * (apostas[idx].odd - 1)).toFixed(2);
+        else if (resultado === 'loss') apostas[idx].pl = -apostas[idx].stake;
+        delete apostas[idx].cashoutValor;
+        salvar();
+        atualizarTudo();
+    }
+
+    function fazerCashout(idx) {
+        const a = apostas[idx];
+        if (a.resultado !== 'pending') {
+            alert('Esta aposta já foi finalizada.');
+            return;
+        }
+        let valor = prompt(`Valor TOTAL recebido no cashout (R$):\nStake: R$${a.stake.toFixed(2)}\nOdd: ${a.odd}`, (a.stake * 0.9).toFixed(2));
+        if (valor === null) return;
+        valor = parseFloat(valor.replace(',', '.'));
+        if (isNaN(valor) || valor <= 0) {
+            alert('Valor inválido.');
+            return;
+        }
+        apostas[idx].resultado = 'cashout';
+        apostas[idx].cashoutValor = valor;
+        apostas[idx].pl = +(valor - a.stake).toFixed(2);
+        salvar();
+        atualizarTudo();
+    }
+
+    function removerAposta(idx) {
+        if (confirm('Remover esta aposta permanentemente?')) {
+            apostas.splice(idx, 1);
+            if (apostaEmEdicao === idx) cancelarEdicao();
+            else if (apostaEmEdicao !== null && apostaEmEdicao > idx) apostaEmEdicao--;
+            salvar();
+            atualizarTudo();
+        }
+    }
+
+    function resetarTudo() {
+        if (confirm('Resetar todo o histórico? Esta ação é irreversível.')) {
+            apostas = [];
+            bancaInicial = 50;
+            document.getElementById('bancaInicialInput').value = 50;
+            salvar();
+            cancelarEdicao();
+            atualizarTudo();
+        }
+    }
+
+    function exportarCSV() {
+        const header = ['Data','Jogo','Mercado','Casa','Odd','Stake','EV%','Tier','Resultado','P&L','Cashout','FreeBet'];
+        const linhas = apostas.map(a => {
+            let pl = '';
+            let cashoutBruto = '';
+            if (a.resultado === 'win') pl = (a.stake * (a.odd - 1)).toFixed(2);
+            else if (a.resultado === 'loss') pl = (-a.stake).toFixed(2);
+            else if (a.resultado === 'cashout' && typeof a.cashoutValor === 'number') {
+                pl = (a.cashoutValor - a.stake).toFixed(2);
+                cashoutBruto = a.cashoutValor.toFixed(2);
+            }
+            return [
+                escapeCSV(a.data), escapeCSV(a.jogo), escapeCSV(a.mercado), escapeCSV(a.casa),
+                a.odd, a.stake,
+                a.ev !== null ? a.ev : '', escapeCSV(a.tier),
+                a.resultado, pl, cashoutBruto,
+                a.freebet ? 'SIM' : ''
+            ].join(';');
+        });
+        const csv = [header.join(';'), ...linhas].join('\n');
+        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = 'owl_controle_copa2026_' + new Date().toISOString().slice(0,10) + '.csv';
+        link.click();
+        URL.revokeObjectURL(link.href);
+    }
+
+    document.getElementById('dataJogo').value = obterDataLocalHoje();
+    carregar();
+</script>
+</body>
+</html>

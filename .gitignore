@@ -1,0 +1,14 @@
+# OS / editor cruft
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+.vscode/
+
+# local exports (keep only index.html in the repo)
+groundtruth-*.html
+
+# python
+__pycache__/
+*.pyc
+.env
